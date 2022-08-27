@@ -22,13 +22,15 @@ function Board() {
 
  // const[board, setBoard] = useState( new Array(BOARD_SIZE).fill(0).map(row => new Array(BOARD_SIZE).fill(0)),);
   const[board, setBoard] = useState(createBoard(BOARD_SIZE));
+  const[snakeCells, setSnakeCell] = useState(new Set([44]));
+  const[snake, setSnake] = useState(new SingleLinkedList(44));
 
     return (
       <div className="board">
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='row'>{
             row.map((cellValue, cellIdx) => (
-              <div key={cellIdx} className={`cell ${false ? 'food-cell' : '' }`}>
+              <div key={cellIdx} className={`cell ${snakeCells.has(cellValue) ? 'snake-cell' : '' }`}>
                 {cellValue}
               </div>
             ))
