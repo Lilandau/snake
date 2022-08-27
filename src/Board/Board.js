@@ -4,7 +4,7 @@ import './Board.css';
 function Board() {
     return (
       <div>
-          FooBar
+          Hallo Board
     </div>
     );
   }
