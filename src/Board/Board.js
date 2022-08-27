@@ -1,6 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import './Board.css';
 import {useInterval} from '../utils.js'
+
+const Direction = {
+  UP: 'UP',
+  RIGHT: 'RIGHT',
+  DOWN: 'DOWN',
+  LEFT: 'LEFT',
+};
 
 class LinkedListNode{
   constructor(value){
@@ -9,7 +16,7 @@ class LinkedListNode{
   }
 }
 
-class SingleLinkedList{
+class LinkedList{
   constructor(value){
     const node = new LinkedListNode(value);
     this.head = node;
@@ -23,18 +30,16 @@ function Board() {
 
  // const[board, setBoard] = useState( new Array(BOARD_SIZE).fill(0).map(row => new Array(BOARD_SIZE).fill(0)),);
   const[board, setBoard] = useState(createBoard(BOARD_SIZE));
-  const[snakeCells, setSnakeCells] = useState(new Set([44]));
-  const[snake, setSnake] = useState(new SingleLinkedList(44));
-
+  const[snake, setSnake] = useState(new LinkedList(getStartingSnakeLLValue(board)));
+  const[snakeCells, setSnakeCells] = useState(new Set([snake.head.value.cell]),);
+  const[direction, setDirection] = useState(Direction.RIGHT);
   const[counter, setcounter]=useState(0);
   
   useInterval(() => {
     // Your custom logic here
     setcounter(counter + 1);
-    let currentCell = snakeCells.keys[0];
-    console.log(snakeCells.entries()[0]);
-    setSnakeCells(snakeCells.add(currentCell+1));
-  }, 1000)
+    moveSnake();
+  }, 2000)
 
     return (
       <div className="board">
@@ -55,6 +60,43 @@ function Board() {
         ))}
     </div>
     );
+
+    function moveSnake(){
+      const currentHeadCoords= {
+        row : snake.head.value.row,
+        col : snake.head.value.col
+      }
+      console.log("current Coord: "+ currentHeadCoords.col+","+ currentHeadCoords.row);
+      console.log("snake: "+ JSON.stringify(snake));
+      const nextHeadCoords= currentHeadCoords;
+      switch(direction) {
+        case Direction.UP:
+          if(nextHeadCoords.row<BOARD_SIZE){
+            nextHeadCoords.row++;
+          }
+          break;
+        case Direction.DOWN:
+          if(nextHeadCoords.row >= 0){
+          nextHeadCoords.row--;
+          }
+          break;
+        case Direction.RIGHT:
+          if(nextHeadCoords.row<BOARD_SIZE){
+          nextHeadCoords.col++;
+          }
+          break;
+        case Direction.LEFT:
+          if(nextHeadCoords.col>=0){
+          nextHeadCoords.col--;
+          }
+          break;  
+        default:
+      }
+      console.log("next Coords" + JSON.stringify(nextHeadCoords))
+      snake.head.value.row=nextHeadCoords.row;
+      snake.head.value.col=nextHeadCoords.col;
+
+    }
   }
 
   function createBoard(size){
@@ -69,6 +111,21 @@ function Board() {
     }
     return board;
   }
+
+  function getStartingSnakeLLValue (board) {
+    const rowSize = board.length;
+    const colSize = board[0].length;
+    const startingRow = Math.round(rowSize / 2);
+    const startingCol = Math.round(colSize / 2);
+    const startingCell = board[startingRow][startingCol];
+    return {
+      row: startingRow,
+      col: startingCol,
+      cell: startingCell,
+    };
+  };
+
+
 
 
 
