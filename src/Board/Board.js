@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './Board.css';
+import {useInterval} from '../utils.js'
 
 class LinkedListNode{
   constructor(value){
@@ -22,11 +23,27 @@ function Board() {
 
  // const[board, setBoard] = useState( new Array(BOARD_SIZE).fill(0).map(row => new Array(BOARD_SIZE).fill(0)),);
   const[board, setBoard] = useState(createBoard(BOARD_SIZE));
-  const[snakeCells, setSnakeCell] = useState(new Set([44]));
+  const[snakeCells, setSnakeCells] = useState(new Set([44]));
   const[snake, setSnake] = useState(new SingleLinkedList(44));
+
+  const[counter, setcounter]=useState(0);
+  
+  useInterval(() => {
+    // Your custom logic here
+    setcounter(counter + 1);
+    let currentCell = snakeCells.keys[0];
+    console.log(snakeCells.entries()[0]);
+    setSnakeCells(snakeCells.add(currentCell+1));
+  }, 1000)
 
     return (
       <div className="board">
+        <div>
+          counter: {counter}
+        </div>
+        <div>
+          snakeCell: {snakeCells}
+        </div>
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='row'>{
             row.map((cellValue, cellIdx) => (
@@ -52,6 +69,9 @@ function Board() {
     }
     return board;
   }
+
+
+
   
   export default Board;
   
