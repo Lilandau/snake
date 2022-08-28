@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Board.css';
 import {useInterval} from '../utils.js'
 
@@ -30,7 +30,6 @@ class Snake{
 
 
 
-
 function Board() {
 
   const[board, setBoard] = useState(createBoard(BOARD_SIZE));
@@ -43,6 +42,12 @@ function Board() {
     setcounter(counter + 1);
     moveSnake();
   }, 2000)
+
+  useEffect(() => {
+    window.addEventListener('keydown', e => {
+      handleKeydown(e);
+    });
+  }, []);
 
     return (
       <div className="board">
@@ -82,22 +87,22 @@ function Board() {
       let nextHead = currentHead;      
       switch(direction) {
         case Direction.UP:
-          if(nextHead.row>=0){
+          if(nextHead.row>0){
             nextHead.row--;
           }
           break;
         case Direction.DOWN:
-          if(nextHead.row <= BOARD_SIZE){
+          if(nextHead.row < (BOARD_SIZE-1)){
             nextHead.row++;
           }
           break;
         case Direction.RIGHT:
-          if(nextHead.col<=BOARD_SIZE){
+          if(nextHead.col < (BOARD_SIZE-1)){
             nextHead.col++;
           }
           break;
         case Direction.LEFT:
-          if(nextHead.col>=0){
+          if(nextHead.col>0){
             nextHead.col--;
           }
           break;  
@@ -109,6 +114,33 @@ function Board() {
       snake.tailValues.push(nextHead.val);
       snake.tailValues=snake.tailValues.slice(-1);
       console.log("new snake: " + JSON.stringify(snake))
+    }
+
+    function handleKeydown(e){
+      const keyPressed = e.key;
+      console.log("keypressed: "+ keyPressed);
+      console.log("old Direction: "+ direction)
+      switch(keyPressed){
+        case ('ArrowUp'):
+          setDirection(Direction.UP);
+          console.log("go up");
+          break;
+        case ('ArrowDown'):
+          setDirection(Direction.DOWN);
+          console.log("go down");
+          break;
+        case ('ArrowLeft'):
+          setDirection(Direction.LEFT);
+          console.log("go left");
+          break;
+        case ('ArrowRight'):
+          setDirection(Direction.RIGHT);
+          console.log("go right");
+          break;
+        default:
+          break;
+      }
+      console.log("new Direction: "+ direction)
     }
   }
 
@@ -124,7 +156,6 @@ function Board() {
     }
     return board;
   }
-
   
   export default Board;
   
