@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './Board.css';
-import {useInterval} from '../utils.js'
+import {useInterval, randomIntFromInterval} from '../utils.js'
 
 const Direction = {
   UP: 'UP',
@@ -11,8 +11,7 @@ const Direction = {
 
 const BOARD_SIZE=10;
 
-
-class SnakeCell{
+class Cell{
   constructor(row, col, val){
     this.row = row;
     this.col = col;
@@ -35,6 +34,8 @@ function Board() {
   const[board, setBoard] = useState(createBoard(BOARD_SIZE));
   const[snake, setSnake] = useState(createSnake(5,5));
   const[direction, setDirection] = useState(Direction.RIGHT);
+  const[fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
+
   const[counter, setcounter]=useState(0);
   
   useInterval(() => {
@@ -60,7 +61,8 @@ function Board() {
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='row'>{
             row.map((cellValue, cellIdx) => (
-              <div key={cellIdx} className={`cell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : '' }`}>
+              <div key={cellIdx} 
+              className={`cell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : '' } ${fodder.val===cellValue ? 'food-cell' : '' }`}>
                 {cellValue}
               </div>
             ))
@@ -70,9 +72,20 @@ function Board() {
     );
 
 
+    function placeFodder(snakeTail, boardSize){
+        while(true){
+          const row = randomIntFromInterval(0, (boardSize-1));
+          const col = randomIntFromInterval(0, (boardSize-1));
+          const val = board[row][col];
+          if(!snakeTail.includes(val)){
+            const fodderCell= new Cell(row, col, val);
+            return fodderCell;
+          }
+        }
+    }
 
     function createSnake(row, col){
-      const snakeHead = new SnakeCell(row, col, board[row][col]);
+      const snakeHead = new Cell(row, col, board[row][col]);
       let snakeTeilValues = new Array(0);
       snakeTeilValues.push(snakeHead.val);
       const snake = new Snake(snakeHead, 1, snakeTeilValues);
