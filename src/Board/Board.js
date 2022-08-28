@@ -9,29 +9,32 @@ const Direction = {
   LEFT: 'LEFT',
 };
 
-class LinkedListNode{
-  constructor(value){
-    this.value= value;
-    this.next=null;
-  }
-}
-
-class LinkedList{
-  constructor(value){
-    const node = new LinkedListNode(value);
-    this.head = node;
-    this.tail=node;
-  }
-}
-
 const BOARD_SIZE=10;
+
+
+class SnakeCell{
+  constructor(row, col, val){
+    this.row = row;
+    this.col = col;
+    this.val = val;
+  }
+}
+
+class Snake{
+  constructor(snakeHead, length, tailValues){
+    this.snakeHead = snakeHead;
+    this.length = length;
+    this.tailValues= tailValues;
+  }
+}
+
+
+
 
 function Board() {
 
- // const[board, setBoard] = useState( new Array(BOARD_SIZE).fill(0).map(row => new Array(BOARD_SIZE).fill(0)),);
   const[board, setBoard] = useState(createBoard(BOARD_SIZE));
-  const[snake, setSnake] = useState(new LinkedList(getStartingSnakeLLValue(board)));
-  const[snakeCells, setSnakeCells] = useState(new Set([snake.head.value.cell]),);
+  const[snake, setSnake] = useState(createSnake(5,5));
   const[direction, setDirection] = useState(Direction.RIGHT);
   const[counter, setcounter]=useState(0);
   
@@ -47,12 +50,12 @@ function Board() {
           counter: {counter}
         </div>
         <div>
-          snakeCell: {snakeCells}
+          snakeHead: {snake.snakeHead.val}
         </div>
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='row'>{
             row.map((cellValue, cellIdx) => (
-              <div key={cellIdx} className={`cell ${snakeCells.has(cellValue) ? 'snake-cell' : '' }`}>
+              <div key={cellIdx} className={`cell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : '' }`}>
                 {cellValue}
               </div>
             ))
@@ -61,41 +64,51 @@ function Board() {
     </div>
     );
 
+
+
+    function createSnake(row, col){
+      const snakeHead = new SnakeCell(row, col, board[row][col]);
+      let snakeTeilValues = new Array(0);
+      snakeTeilValues.push(snakeHead.val);
+      const snake = new Snake(snakeHead, 1, snakeTeilValues);
+      return snake;
+    }
+
     function moveSnake(){
-      const currentHeadCoords= {
-        row : snake.head.value.row,
-        col : snake.head.value.col
-      }
-      console.log("current Coord: "+ currentHeadCoords.col+","+ currentHeadCoords.row);
-      console.log("snake: "+ JSON.stringify(snake));
-      const nextHeadCoords= currentHeadCoords;
+      const currentHead = snake.snakeHead;
+      console.log("current Head: "+ JSON.stringify(currentHead));
+      console.log("current snake: "+ JSON.stringify(snake));
+      
+      let nextHead = currentHead;      
       switch(direction) {
         case Direction.UP:
-          if(nextHeadCoords.row<BOARD_SIZE){
-            nextHeadCoords.row++;
+          if(nextHead.row>=0){
+            nextHead.row--;
           }
           break;
         case Direction.DOWN:
-          if(nextHeadCoords.row >= 0){
-          nextHeadCoords.row--;
+          if(nextHead.row <= BOARD_SIZE){
+            nextHead.row++;
           }
           break;
         case Direction.RIGHT:
-          if(nextHeadCoords.row<BOARD_SIZE){
-          nextHeadCoords.col++;
+          if(nextHead.col<=BOARD_SIZE){
+            nextHead.col++;
           }
           break;
         case Direction.LEFT:
-          if(nextHeadCoords.col>=0){
-          nextHeadCoords.col--;
+          if(nextHead.col>=0){
+            nextHead.col--;
           }
           break;  
         default:
       }
-      console.log("next Coords" + JSON.stringify(nextHeadCoords))
-      snake.head.value.row=nextHeadCoords.row;
-      snake.head.value.col=nextHeadCoords.col;
-
+      nextHead.val=board[nextHead.row][nextHead.col];
+      console.log("next Head: " + JSON.stringify(nextHead));
+      snake.snakeHead=nextHead;
+      snake.tailValues.push(nextHead.val);
+      snake.tailValues=snake.tailValues.slice(-1);
+      console.log("new snake: " + JSON.stringify(snake))
     }
   }
 
@@ -111,23 +124,6 @@ function Board() {
     }
     return board;
   }
-
-  function getStartingSnakeLLValue (board) {
-    const rowSize = board.length;
-    const colSize = board[0].length;
-    const startingRow = Math.round(rowSize / 2);
-    const startingCol = Math.round(colSize / 2);
-    const startingCell = board[startingRow][startingCol];
-    return {
-      row: startingRow,
-      col: startingCol,
-      cell: startingCell,
-    };
-  };
-
-
-
-
 
   
   export default Board;
