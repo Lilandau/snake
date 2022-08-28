@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './Board.css';
+import PopUp from "./PopUp";
 import {useInterval, randomIntFromInterval} from '../utils.js'
 
 const Direction = {
@@ -58,6 +59,10 @@ function Board() {
         <div>
           snakeHead: {snake.snakeHead.val}
         </div>
+        <div>
+          <PopUp />
+          <div id="popup-root" />
+        </div>
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='row'>{
             row.map((cellValue, cellIdx) => (
@@ -70,7 +75,6 @@ function Board() {
         ))}
     </div>
     );
-
 
     function placeFodder(snakeTail, boardSize){
         while(true){
