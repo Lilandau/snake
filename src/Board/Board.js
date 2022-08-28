@@ -93,10 +93,10 @@ function Board() {
     }
 
     function moveSnake(){
-      console.log("current snake"+ JSON.stringify(snake));
       const currentHead = snake.snakeHead;
-      
-      let nextHead = currentHead;      
+      console.log("snake: "+ JSON.stringify(snake));
+
+      let nextHead = new Cell(currentHead.row, currentHead.col, currentHead.val);      
       switch(direction) {
         case Direction.UP:
           if(nextHead.row>0){
@@ -121,21 +121,32 @@ function Board() {
         default:
       }
       nextHead.val=board[nextHead.row][nextHead.col];
-      snake.snakeHead=nextHead;
 
-      snake.tailValues.push(nextHead.val);
+      
+      if(!(currentHead.row === nextHead.row)
+        && !(currentHead.col === nextHead.col)){
+          snake.snakeHead=nextHead;
+          //check if snake moves on fodder-cell or bites itself
+         moveOnSnake(snake);
+         moveOnFodder(snake, nextHead.val);
+      }else{
+       //TODO 1) kill / 2) move to other side
+      }
+    }
 
+    function moveOnFodder(snake, val){
+      snake.tailValues.push(val);
       if((snake.snakeHead.row === fodder.row)
         && (snake.snakeHead.col === fodder.col)){
-        console.log("fooder eaten");
-        setFodder(placeFodder(snake.tailValues, BOARD_SIZE/2, BOARD_SIZE/2));
-        snake.length++;
-        console.log("new snake"+ JSON.stringify(snake));
+          setFodder(placeFodder(snake.tailValues, BOARD_SIZE/2, BOARD_SIZE/2));
+          snake.length++;
       }else
       {
         snake.tailValues=snake.tailValues.slice(-snake.length);
-        console.log("new snake"+ JSON.stringify(snake));
       }
+    }
+
+    function moveOnSnake(snake){
       
     }
 
