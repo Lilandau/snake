@@ -93,9 +93,8 @@ function Board() {
     }
 
     function moveSnake(){
+      console.log("current snake"+ JSON.stringify(snake));
       const currentHead = snake.snakeHead;
-      console.log("current Head: "+ JSON.stringify(currentHead));
-      console.log("current snake: "+ JSON.stringify(snake));
       
       let nextHead = currentHead;      
       switch(direction) {
@@ -122,38 +121,42 @@ function Board() {
         default:
       }
       nextHead.val=board[nextHead.row][nextHead.col];
-      console.log("next Head: " + JSON.stringify(nextHead));
       snake.snakeHead=nextHead;
+
       snake.tailValues.push(nextHead.val);
-      snake.tailValues=snake.tailValues.slice(-1);
-      console.log("new snake: " + JSON.stringify(snake))
+
+      if((snake.snakeHead.row === fodder.row)
+        && (snake.snakeHead.col === fodder.col)){
+        console.log("fooder eaten");
+        setFodder(placeFodder(snake.tailValues, BOARD_SIZE/2, BOARD_SIZE/2));
+        snake.length++;
+        console.log("new snake"+ JSON.stringify(snake));
+      }else
+      {
+        snake.tailValues=snake.tailValues.slice(-snake.length);
+        console.log("new snake"+ JSON.stringify(snake));
+      }
+      
     }
 
     function handleKeydown(e){
       const keyPressed = e.key;
-      console.log("keypressed: "+ keyPressed);
-      console.log("old Direction: "+ direction)
       switch(keyPressed){
         case ('ArrowUp'):
           setDirection(Direction.UP);
-          console.log("go up");
           break;
         case ('ArrowDown'):
           setDirection(Direction.DOWN);
-          console.log("go down");
           break;
         case ('ArrowLeft'):
           setDirection(Direction.LEFT);
-          console.log("go left");
           break;
         case ('ArrowRight'):
           setDirection(Direction.RIGHT);
-          console.log("go right");
           break;
         default:
           break;
       }
-      console.log("new Direction: "+ direction)
     }
   }
 
