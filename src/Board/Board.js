@@ -96,6 +96,47 @@ function Board() {
       const currentHead = snake.snakeHead;
       console.log("snake: "+ JSON.stringify(snake));
 
+      const nextHead= getNextHead(currentHead);
+
+      console.log("currentHead: "+ JSON.stringify(currentHead));
+      console.log("nextHead: "+ JSON.stringify(nextHead));
+
+      if(!((currentHead.row === nextHead.row)
+        && (currentHead.col === nextHead.col))){
+          snake.snakeHead=nextHead;
+          //check if snake moves on fodder-cell or bites itself
+         moveOnSnake(snake, nextHead.val);
+         moveOnFodder(snake, nextHead.val);
+      }else{
+       //TODO 1) kill / 2) move to other side
+      }
+    }
+
+    function moveOnFodder(snake, val){
+      snake.tailValues.push(val);
+      if((snake.snakeHead.row === fodder.row)
+        && (snake.snakeHead.col === fodder.col)){
+          setFodder(placeFodder(snake.tailValues, BOARD_SIZE/2, BOARD_SIZE/2));
+          snake.length++;
+      }else
+      {
+        snake.tailValues=snake.tailValues.slice(-snake.length);
+      }
+    }
+
+    function moveOnSnake(snake, nextVal){
+      /**
+      if(snake.tailValues.includes(nextVal)){
+        //kill
+        console.log("you are killed.");
+    }else
+    {
+      snake.tailValues=snake.tailValues.slice(-snake.length);
+    }
+     */
+    }
+
+    function getNextHead(currentHead){
       let nextHead = new Cell(currentHead.row, currentHead.col, currentHead.val);      
       switch(direction) {
         case Direction.UP:
@@ -121,33 +162,7 @@ function Board() {
         default:
       }
       nextHead.val=board[nextHead.row][nextHead.col];
-
-      
-      if(!(currentHead.row === nextHead.row)
-        && !(currentHead.col === nextHead.col)){
-          snake.snakeHead=nextHead;
-          //check if snake moves on fodder-cell or bites itself
-         moveOnSnake(snake);
-         moveOnFodder(snake, nextHead.val);
-      }else{
-       //TODO 1) kill / 2) move to other side
-      }
-    }
-
-    function moveOnFodder(snake, val){
-      snake.tailValues.push(val);
-      if((snake.snakeHead.row === fodder.row)
-        && (snake.snakeHead.col === fodder.col)){
-          setFodder(placeFodder(snake.tailValues, BOARD_SIZE/2, BOARD_SIZE/2));
-          snake.length++;
-      }else
-      {
-        snake.tailValues=snake.tailValues.slice(-snake.length);
-      }
-    }
-
-    function moveOnSnake(snake){
-      
+      return nextHead;
     }
 
     function handleKeydown(e){
