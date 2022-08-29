@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 
 export function randomIntFromInterval(min, max){
     return Math.floor(Math.random()* (max-min +1)+min);

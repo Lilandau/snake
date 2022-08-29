@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import './Board.css';
 import {randomIntFromInterval, useInterval} from '../utils.js'
+import Test from "./Test";
 
 const Direction = {
   UP: 'UP',
@@ -43,7 +44,7 @@ function Board() {
     // Your custom logic here
     setcounter(counter + 1);
     moveSnake();
-  }, 2000)
+  }, delay)
 
   useEffect(() => {
     window.addEventListener('keydown', e => {
@@ -52,7 +53,7 @@ function Board() {
   }, []);
 
     return (
-      <div className="board">
+      <div className="snakeBoard">
         <div>
           counter: {counter}
         </div>
@@ -63,11 +64,14 @@ function Board() {
         onClick={handleStop}>
           <button>STOP</button>
         </div>
+        <div>
+          <Test/>
+        </div>
         {board.map((row, rowIdx)=> (
-          <div key={rowIdx} className='row'>{
+          <div key={rowIdx} className='snakeBoardRow'>{
             row.map((cellValue, cellIdx) => (
               <div key={cellIdx} 
-              className={`cell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : '' } ${fodder.val===cellValue ? 'food-cell' : '' }`}>
+              className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : '' } ${fodder.val===cellValue ? 'food-cell' : '' }`}>
                 {cellValue}
               </div>
             ))
