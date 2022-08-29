@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/Button";
-import {Card, Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import {Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import {useState} from "react";
 import './Home.css';
 
