@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import './Board.css';
 import {randomIntFromInterval, useInterval} from '../utils.js'
-import Test from "./Test";
+import Home from "../interface/Home";
 
 const Direction = {
   UP: 'UP',
@@ -65,7 +65,7 @@ function Board() {
           <button>STOP</button>
         </div>
         <div>
-          <Test/>
+          <Home/>
         </div>
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='snakeBoardRow'>{
