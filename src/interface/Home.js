@@ -13,6 +13,11 @@ export default function Home(){
     function handleChange(val){
         setValue(val);
         console.log("option: "+ val+ "was selected.")
+        onChoseSpeed(val);
+    }
+    
+    function onChoseSpeed(val){
+        console.log("speed changed to "+ val+ " in Home");
     }
     
     return (

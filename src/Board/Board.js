@@ -36,7 +36,7 @@ function Board() {
   const[snake, setSnake] = useState(createSnake(5,5));
   const[direction, setDirection] = useState(Direction.RIGHT);
   const[fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
-  const[delay, setDelay]=useState(2000);
+  const[delay, setDelay]=useState(1000);
 
   const[counter, setcounter]=useState(0);
   
@@ -51,8 +51,14 @@ function Board() {
       handleKeydown(e);
     });
   }, []);
+  
 
-    return (
+
+  function setSpeed() {
+    console.log("speed was changed on Board");
+  }
+
+  return (
       <div className="snakeBoard">
         <div>
           counter: {counter}
@@ -65,14 +71,14 @@ function Board() {
           <button>STOP</button>
         </div>
         <div>
-          <Home/>
+          <Home onChoseSpeed={setSpeed()}/>
         </div>
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='snakeBoardRow'>{
             row.map((cellValue, cellIdx) => (
               <div key={cellIdx} 
               className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : '' } ${fodder.val===cellValue ? 'food-cell' : '' }`}>
-                {cellValue}
+                
               </div>
             ))
             }</div>
@@ -197,6 +203,8 @@ function Board() {
       console.log("stop clicked");
       setDelay(null);
     }
+    
+
   }
 
   function createBoard(size){
