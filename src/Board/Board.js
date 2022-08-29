@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import './Board.css';
-import PopUp from "./PopUp";
-import {useInterval, randomIntFromInterval} from '../utils.js'
+import {randomIntFromInterval, useInterval} from '../utils.js'
 
 const Direction = {
   UP: 'UP',
@@ -36,6 +35,7 @@ function Board() {
   const[snake, setSnake] = useState(createSnake(5,5));
   const[direction, setDirection] = useState(Direction.RIGHT);
   const[fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
+  const[delay, setDelay]=useState(2000);
 
   const[counter, setcounter]=useState(0);
   
@@ -59,9 +59,9 @@ function Board() {
         <div>
           snakeHead: {snake.snakeHead.val}
         </div>
-        <div>
-          <PopUp />
-          <div id="popup-root" />
+        <div className={'stopButton'}
+        onClick={handleStop}>
+          <button>STOP</button>
         </div>
         {board.map((row, rowIdx)=> (
           <div key={rowIdx} className='row'>{
@@ -187,6 +187,11 @@ function Board() {
         default:
           break;
       }
+    }
+    
+    function handleStop(){
+      console.log("stop clicked");
+      setDelay(null);
     }
   }
 
