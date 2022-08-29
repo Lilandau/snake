@@ -3,7 +3,7 @@ import {Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import {useState} from "react";
 import './Home.css';
 
-export default function Home(){
+export default function Home(props){
     const [show, setShow] = useState(true);
 
     const handleClose = () => setShow(false);
@@ -15,9 +15,10 @@ export default function Home(){
         console.log("option: "+ val+ "was selected.")
         onChoseSpeed(val);
     }
-    
+
     function onChoseSpeed(val){
         console.log("speed changed to "+ val+ " in Home");
+        props.onChoseSpeed(val);
     }
     
     return (
@@ -58,4 +59,7 @@ export default function Home(){
             </Modal>
         </>
     );
+
+
+
 }
