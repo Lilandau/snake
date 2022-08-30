@@ -36,6 +36,7 @@ function Board() {
     const [direction, setDirection] = useState(Direction.RIGHT);
     const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
     const [delay, setDelay] = useState(null);
+    const [gameOver, setGameOver] = useState(false);
 
     const [counter, setcounter] = useState(0);
 
@@ -56,14 +57,11 @@ function Board() {
         console.log(val);
         setDelay(val);
     }
-    
+
     return (
         <div className="snakeBoard">
             <div>
-                counter: {counter}
-            </div>
-            <div>
-                snakeHead: {snake.snakeHead.val}
+                Score: {snake.length}
             </div>
             <div className={'stopButton'}
                  onClick={handleStop}>
@@ -134,15 +132,15 @@ function Board() {
     }
 
     function moveOnSnake(snake, nextVal) {
-        /**
-         if(snake.tailValues.includes(nextVal)){
-        //kill
-        console.log("you are killed.");
-    }else
-         {
-      snake.tailValues=snake.tailValues.slice(-snake.length);
-    }
-         */
+
+        if (snake.tailValues.includes(nextVal)) {
+            //kill
+            console.log("you are killed.");
+            setDelay(null);
+        } else {
+            snake.tailValues = snake.tailValues.slice(-snake.length);
+        }
+         
     }
 
     function getNextHead(currentHead) {
@@ -198,7 +196,7 @@ function Board() {
         console.log("stop clicked");
         setDelay(null);
     }
-    
+
 }
 
 function createBoard(size) {
