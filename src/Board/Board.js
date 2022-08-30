@@ -67,7 +67,7 @@ function Board() {
                 <Home onChoseSpeed={setSpeed}/>
             </div>
             <div>
-                <KillScreen gameOver={gameOver}/>
+                <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
             </div>
             <div>
                 Score: {snake.length}
@@ -89,6 +89,15 @@ function Board() {
             ))}
         </div>
     );
+    
+    function startNewGame(){
+        createSnake(5,5)
+        placeFodder(snake.tailValues, BOARD_SIZE);
+        setcounter(0);
+        setGameOver(false);
+        setDelay(delay);
+        console.log("new Game started");
+    }
 
     function setSpeed(val) {
         console.log("speed was changed on Board");

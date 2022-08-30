@@ -9,12 +9,15 @@ export default function KillScreen(props){
     const handleClose = () => setShow(false);
     
     
-    //TODO handle Close with play new
+    function handleNewGame(){
+        console.log("new Game");
+        props.startNewGame();
+    }
     
     
     return(
         <>
-            <Modal show={props.gameOver} onHide={handleClose} size="lg"
+            <Modal show={props.gameOver} onHide={handleNewGame} size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
                 <Modal.Header closeButton>
@@ -22,7 +25,7 @@ export default function KillScreen(props){
                 </Modal.Header>
                 <Modal.Body>
                     <div>
-                        <Button variant="primary" onClick={handleClose}>
+                        <Button variant="primary" onClick={handleNewGame}>
                             Play Again
                         </Button>
                     </div>
