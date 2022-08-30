@@ -3,17 +3,18 @@ import {Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import {useState} from "react";
 
 
-export default function KillScreen(){
+export default function KillScreen(props){
     
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    
+    
+    //TODO handle Close with play new
     
     
     return(
         <>
-
-            <Modal show={show} onHide={handleClose} size="lg"
+            <Modal show={props.gameOver} onHide={handleClose} size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
                 <Modal.Header closeButton>

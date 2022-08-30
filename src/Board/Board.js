@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import './Board.css';
 import {randomIntFromInterval, useInterval} from '../utils.js'
 import Home from "../interface/Home";
+import KillScreen from "../interface/KillScreen";
 
 const Direction = {
     UP: 'UP',
@@ -50,16 +51,24 @@ function Board() {
         window.addEventListener('keydown', e => {
             handleKeydown(e);
         });
-    }, []);
+    });
 
-    function setSpeed(val) {
-        console.log("speed was changed on Board");
-        console.log(val);
-        setDelay(val);
-    }
+    useEffect(()=>{
+        if(gameOver){
+            console.log("gameOver " +gameOver);
+            setDelay(null);
+        }
+    })
 
+ 
     return (
         <div className="snakeBoard">
+            <div>
+                <Home onChoseSpeed={setSpeed}/>
+            </div>
+            <div>
+                <KillScreen gameOver={gameOver}/>
+            </div>
             <div>
                 Score: {snake.length}
             </div>
@@ -67,9 +76,7 @@ function Board() {
                  onClick={handleStop}>
                 <button>STOP</button>
             </div>
-            <div>
-                <Home onChoseSpeed={setSpeed}/>
-            </div>
+            
             {board.map((row, rowIdx) => (
                 <div key={rowIdx} className='snakeBoardRow'>{
                     row.map((cellValue, cellIdx) => (
@@ -82,6 +89,14 @@ function Board() {
             ))}
         </div>
     );
+
+    function setSpeed(val) {
+        console.log("speed was changed on Board");
+        console.log(val);
+        setDelay(val);
+    }
+    
+    
 
     function placeFodder(snakeTail, boardSize) {
         while (true) {
@@ -136,7 +151,8 @@ function Board() {
         if (snake.tailValues.includes(nextVal)) {
             //kill
             console.log("you are killed.");
-            setDelay(null);
+            setGameOver(true);
+            
         } else {
             snake.tailValues = snake.tailValues.slice(-snake.length);
         }
