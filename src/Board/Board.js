@@ -124,7 +124,7 @@ function Board() {
         snake.tailValues.push(val);
         if ((snake.snakeHead.row === fodder.row)
             && (snake.snakeHead.col === fodder.col)) {
-            setFodder(placeFodder(snake.tailValues, BOARD_SIZE / 2, BOARD_SIZE / 2));
+            setFodder(placeFodder(snake.tailValues, BOARD_SIZE, BOARD_SIZE));
             snake.length++;
         } else {
             snake.tailValues = snake.tailValues.slice(-snake.length);
