@@ -11,6 +11,8 @@ const Direction = {
     LEFT: 'LEFT',
 };
 
+let storedSpeed = 0;
+
 const BOARD_SIZE = 10;
 
 class Cell {
@@ -56,6 +58,13 @@ function Board() {
     
 
     useEffect(()=>{
+        if(newGame){
+            console.log("delay: "+ delay);
+            setDelay(storedSpeed);
+        }
+        if(!newGame){
+            setDelay(null);
+        }
         if(gameOver){
             setDelay(null);
         }
@@ -65,7 +74,7 @@ function Board() {
             setSnake(createSnake(5,5));
             setFodder(placeFodder(snake.tailValues, BOARD_SIZE));
             setcounter(0);
-            setDelay(1000);
+            setDelay(storedSpeed);
         }
     });
 
@@ -73,7 +82,7 @@ function Board() {
     return (
         <div className="snakeBoard">
             <div>
-                <Home onChoseSpeed={setSpeed}/>
+                <Home onChoseSpeed={setSpeed} startNewGame={startNewGame}/>
             </div>
             <div>
                 <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
@@ -101,14 +110,11 @@ function Board() {
 
 
     function startNewGame(){
-        console.log("new Game will be startet from Board");
         setNewGame(true);
     }
 
     function setSpeed(val) {
-        console.log("speed was changed on Board");
-        console.log(val);
-        setDelay(val);
+        storedSpeed=val;      
     }
     
     function placeFodder(snakeTail, boardSize) {
@@ -162,9 +168,9 @@ function Board() {
     function moveOnSnake(snake, nextVal) {
 
         if (snake.tailValues.includes(nextVal)) {
-            //kill
             console.log("you are killed.");
             setGameOver(true);
+            setNewGame(false);
             
         } else {
             snake.tailValues = snake.tailValues.slice(-snake.length);

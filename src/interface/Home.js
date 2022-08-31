@@ -6,9 +6,13 @@ import './Home.css';
 export default function Home(props){
     const [show, setShow] = useState(true);
 
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [value, setValue] = useState([1, 3]);
+
+    function handleClose(){
+        setShow(false);
+        props.startNewGame();
+    }
 
     function handleChange(val){
         setValue(val);
