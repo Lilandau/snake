@@ -44,11 +44,7 @@ function Board() {
 
     const [counter, setcounter] = useState(0);
 
-    useInterval(() => {
-        // Your custom logic here
-        setcounter(counter + 1);
-        moveSnake();
-    }, delay)
+
 
     useEffect(() => {
         window.addEventListener('keydown', e => {
@@ -62,9 +58,6 @@ function Board() {
             console.log("delay: "+ delay);
             setDelay(storedSpeed);
         }
-        if(!newGame){
-            setDelay(null);
-        }
         if(gameOver){
             setDelay(null);
         }
@@ -75,9 +68,17 @@ function Board() {
             setFodder(placeFodder(snake.tailValues, BOARD_SIZE));
             setcounter(0);
             setDelay(storedSpeed);
+            console.log("stored Speed: "+ storedSpeed);
+            console.log("delay: "+ delay);
         }
     });
-    //test
+    
+    
+    useInterval(() => {
+        // Your custom logic here
+        setcounter(counter + 1);
+        moveSnake();
+    }, delay)
 
  
     return (

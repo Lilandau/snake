@@ -11,7 +11,7 @@ export default function KillScreen(props){
     
     function handleNewGame(){
         console.log("new Game triggert in KillScreen");
-        props.startNewGame();
+        props.startNewGame(true);
     }
         
     return(
