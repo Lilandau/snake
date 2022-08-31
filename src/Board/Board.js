@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import './Board.css';
-import {randomIntFromInterval, useInterval} from '../utils.js'
+import { randomIntFromInterval, useInterval } from '../utils.js'
 import Home from "../interface/Home";
 import KillScreen from "../interface/KillScreen";
 
@@ -47,61 +47,61 @@ function Board() {
 
 
     useEffect(() => {
-        window.addEventListener('keydown', e => {
-            handleKeydown(e);
+        window.addEventListener('keyup', e => {
+            setDirection(handleKeydown(e));
         });
     });
-    
 
-    useEffect(()=>{
-        if(newGame){
-            console.log("delay: "+ delay);
+
+    useEffect(() => {
+        if (newGame) {
+            console.log("delay: " + delay);
             setDelay(storedSpeed);
         }
-        if(gameOver){
+        if (gameOver) {
             setDelay(null);
         }
-        if(newGame && gameOver){
+        if (newGame && gameOver) {
             setGameOver(false);
             setNewGame(false);
-            setSnake(createSnake(5,5));
+            setSnake(createSnake(5, 5));
             setFodder(placeFodder(snake.tailValues, BOARD_SIZE));
             setcounter(0);
             setDelay(storedSpeed);
-            console.log("stored Speed: "+ storedSpeed);
-            console.log("delay: "+ delay);
+            console.log("stored Speed: " + storedSpeed);
+            console.log("delay: " + delay);
         }
     });
-    
-    
+
+
     useInterval(() => {
         // Your custom logic here
         setcounter(counter + 1);
         moveSnake();
     }, delay)
 
- 
+
     return (
         <div className="snakeBoard">
             <div>
-                <Home onChoseSpeed={setSpeed} startNewGame={startNewGame}/>
+                <Home onChoseSpeed={setSpeed} startNewGame={startNewGame} />
             </div>
             <div>
-                <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
+                <KillScreen gameOver={gameOver} startNewGame={startNewGame} />
             </div>
             <div>
                 Score: {snake.length}
             </div>
             <div className={'stopButton'}
-                 onClick={handleStop}>
+                onClick={handleStop}>
                 <button>STOP</button>
             </div>
-            
+
             {board.map((row, rowIdx) => (
                 <div key={rowIdx} className='snakeBoardRow'>{
                     row.map((cellValue, cellIdx) => (
                         <div key={cellIdx}
-                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}`}>
+                            className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}`}>
 
                         </div>
                     ))
@@ -111,14 +111,14 @@ function Board() {
     );
 
 
-    function startNewGame(){
+    function startNewGame() {
         setNewGame(true);
     }
 
     function setSpeed(val) {
-        storedSpeed=val;      
+        storedSpeed = val;
     }
-    
+
     function placeFodder(snakeTail, boardSize) {
         while (true) {
             const row = randomIntFromInterval(0, (boardSize - 1));
@@ -173,11 +173,11 @@ function Board() {
             console.log("you are killed.");
             setGameOver(true);
             setNewGame(false);
-            
+
         } else {
             snake.tailValues = snake.tailValues.slice(-snake.length);
         }
-         
+
     }
 
     function getNextHead(currentHead) {
@@ -213,16 +213,45 @@ function Board() {
         const keyPressed = e.key;
         switch (keyPressed) {
             case ('ArrowUp'):
-                setDirection(Direction.UP);
+                if (snake.length <= 1) {
+                    return Direction.UP;
+                } else {
+                    if (direction == Direction.DOWN) {
+                        return Direction.DOWN;
+                    }
+                    return Direction.UP;
+                }
                 break;
             case ('ArrowDown'):
-                setDirection(Direction.DOWN);
+                if (snake.length <= 1) {
+                    return Direction.DOWN;
+                } else {
+                    if (direction == Direction.UP) {
+                        return Direction.UP;
+                    }
+                    return Direction.DOWN;
+                }
                 break;
             case ('ArrowLeft'):
-                setDirection(Direction.LEFT);
+                if (snake.length <= 1) {
+                    return Direction.LEFT;
+                }
+                else {
+                    if (direction == Direction.RIGHT) {
+                        return Direction.RIGHT;
+                    }
+                    return Direction.LEFT;
+                }
                 break;
             case ('ArrowRight'):
-                setDirection(Direction.RIGHT);
+                if (snake.length <= 1) {
+                    return Direction.RIGHT;
+                } else {
+                    if (direction == Direction.LEFT) {
+                        return Direction.LEFT;
+                    }
+                    return Direction.RIGHT;
+                }
                 break;
             default:
                 break;
@@ -250,4 +279,4 @@ function createBoard(size) {
 }
 
 export default Board;
-  
+
