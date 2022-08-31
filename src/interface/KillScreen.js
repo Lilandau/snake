@@ -13,8 +13,7 @@ export default function KillScreen(props){
         console.log("new Game triggert in KillScreen");
         props.startNewGame();
     }
-    
-    
+        
     return(
         <>
             <Modal show={props.gameOver} size="lg"

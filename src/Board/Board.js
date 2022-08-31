@@ -77,6 +77,7 @@ function Board() {
             setDelay(storedSpeed);
         }
     });
+    //test
 
  
     return (
