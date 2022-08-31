@@ -10,14 +10,14 @@ export default function KillScreen(props){
     
     
     function handleNewGame(){
-        console.log("new Game");
+        console.log("new Game triggert in KillScreen");
         props.startNewGame();
     }
     
     
     return(
         <>
-            <Modal show={props.gameOver} onHide={handleNewGame} size="lg"
+            <Modal show={props.gameOver} size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
                 <Modal.Header closeButton>

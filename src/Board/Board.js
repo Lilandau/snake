@@ -32,6 +32,7 @@ class Snake {
 
 function Board() {
 
+    const [newGame, setNewGame] = useState(false);
     const [board, setBoard] = useState(createBoard(BOARD_SIZE));
     const [snake, setSnake] = useState(createSnake(5, 5));
     const [direction, setDirection] = useState(Direction.RIGHT);
@@ -52,13 +53,21 @@ function Board() {
             handleKeydown(e);
         });
     });
+    
 
     useEffect(()=>{
         if(gameOver){
-            console.log("gameOver " +gameOver);
             setDelay(null);
         }
-    })
+        if(newGame && gameOver){
+            setGameOver(false);
+            setNewGame(false);
+            setSnake(createSnake(5,5));
+            setFodder(placeFodder(snake.tailValues, BOARD_SIZE));
+            setcounter(0);
+            setDelay(1000);
+        }
+    });
 
  
     return (
@@ -89,14 +98,11 @@ function Board() {
             ))}
         </div>
     );
-    
+
+
     function startNewGame(){
-        createSnake(5,5)
-        placeFodder(snake.tailValues, BOARD_SIZE);
-        setcounter(0);
-        setGameOver(false);
-        setDelay(delay);
-        console.log("new Game started");
+        console.log("new Game will be startet from Board");
+        setNewGame(true);
     }
 
     function setSpeed(val) {
@@ -105,8 +111,6 @@ function Board() {
         setDelay(val);
     }
     
-    
-
     function placeFodder(snakeTail, boardSize) {
         while (true) {
             const row = randomIntFromInterval(0, (boardSize - 1));
