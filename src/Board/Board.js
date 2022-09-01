@@ -1,57 +1,255 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import './Board.css';
+import {randomIntFromInterval, useInterval} from '../utils.js'
+import Home from "../interface/Home";
+import KillScreen from "../interface/KillScreen";
+import {BOARD_SIZE, Cell, createBoard, Direction, setStoredSpeed, storedSpeed} from "./gameUtils";
 
-class LinkedListNode{
-  constructor(value){
-    this.value= value;
-    this.next=null;
-  }
+
+class Snake {
+    constructor(snakeHead, length, tailValues) {
+        this.snakeHead = snakeHead;
+        this.length = length;
+        this.tailValues = tailValues;
+    }
 }
 
-class SingleLinkedList{
-  constructor(value){
-    const node = new LinkedListNode(value);
-    this.head = node;
-    this.tail=node;
-  }
-}
-
-const BOARD_SIZE=10;
 
 function Board() {
 
- // const[board, setBoard] = useState( new Array(BOARD_SIZE).fill(0).map(row => new Array(BOARD_SIZE).fill(0)),);
-  const[board, setBoard] = useState(createBoard(BOARD_SIZE));
-  const[snakeCells, setSnakeCell] = useState(new Set([44]));
-  const[snake, setSnake] = useState(new SingleLinkedList(44));
+    const [newGame, setNewGame] = useState(false);
+    const [board, setBoard] = useState(createBoard(BOARD_SIZE));
+    const [snake, setSnake] = useState(createSnake(5, 5));
+    let [direction, setDirection] = useState(Direction.RIGHT);
+    const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
+    const [delay, setDelay] = useState(null);
+    const [gameOver, setGameOver] = useState(false);
+
+    const [counter, setcounter] = useState(0);
+
+
+    useEffect(() => {
+        window.addEventListener('keyup', e => {
+            console.log("keydown: " + e.key);
+            console.log("returned Direction: " + handleKeydown(e));
+            //direction=handleKeydown(e);
+            setDirection(handleKeydown(e));
+            console.log("actual direction " + direction);
+        });
+        ;
+    }, []);
+
+
+    useEffect(() => {
+        if (newGame) {
+            console.log("delay: " + delay);
+            setDelay(storedSpeed);
+            setNewGame(false);
+        }
+        if (gameOver) {
+            setDelay(null);
+        }
+        if (newGame && gameOver) {
+            setGameOver(false);
+            setNewGame(false);
+            setSnake(createSnake(5, 5));
+            setFodder(placeFodder(snake.tailValues, BOARD_SIZE));
+            setcounter(0);
+            setDelay(storedSpeed);
+            console.log("stored Speed: " + storedSpeed);
+            console.log("delay: " + delay);
+        }
+    });
+
+
+    useInterval(() => {
+        // Your custom logic here
+        setcounter(counter + 1);
+        moveSnake();
+    }, delay)
+
 
     return (
-      <div className="board">
-        {board.map((row, rowIdx)=> (
-          <div key={rowIdx} className='row'>{
-            row.map((cellValue, cellIdx) => (
-              <div key={cellIdx} className={`cell ${snakeCells.has(cellValue) ? 'snake-cell' : '' }`}>
-                {cellValue}
-              </div>
-            ))
-            }</div>
-        ))}
-    </div>
-    );
-  }
+        <div className="snakeBoard">
+            <div>
+                <Home onChoseSpeed={setStoredSpeed} startNewGame={startNewGame}/>
+            </div>
+            <div>
+                <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
+            </div>
+            <div>
+                Score: {snake.length}
+            </div>
+            <div className={'stopButton'}
+                 onClick={handleStop}>
+                <button>STOP</button>
+            </div>
 
-  function createBoard(size){
-    let counter = 1;
-    const board =[];
-    for(let row= 0; row <size; row++){
-      const currentRow=[];
-      for(let col= 0; col <size; col++){
-        currentRow.push(counter++);
-      }
-      board.push(currentRow);
+            {board.map((row, rowIdx) => (
+                <div key={rowIdx} className='snakeBoardRow'>{
+                    row.map((cellValue, cellIdx) => (
+                        <div key={cellIdx}
+                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}`}>
+
+                        </div>
+                    ))
+                }</div>
+            ))}
+        </div>
+    );
+
+
+    function startNewGame() {
+        setNewGame(true);
     }
-    return board;
-  }
-  
-  export default Board;
-  
+    
+
+    function placeFodder(snakeTail, boardSize) {
+        while (true) {
+            const row = randomIntFromInterval(0, (boardSize - 1));
+            const col = randomIntFromInterval(0, (boardSize - 1));
+            const val = board[row][col];
+            if (!snakeTail.includes(val)) {
+                const fodderCell = new Cell(row, col, val);
+                return fodderCell;
+            }
+        }
+    }
+
+    function createSnake(row, col) {
+        const snakeHead = new Cell(row, col, board[row][col]);
+        let snakeTeilValues = new Array(0);
+        snakeTeilValues.push(snakeHead.val);
+        const snake = new Snake(snakeHead, 1, snakeTeilValues);
+        return snake;
+    }
+
+    function moveSnake() {
+        const currentHead = snake.snakeHead;
+
+        const nextHead = getNextHead(currentHead);
+
+
+        if (!((currentHead.row === nextHead.row)
+            && (currentHead.col === nextHead.col))) {
+            snake.snakeHead = nextHead;
+            //check if snake moves on fodder-cell or bites itself
+            moveOnSnake(snake, nextHead.val);
+            moveOnFodder(snake, nextHead.val);
+        } else {
+            //TODO 1) kill / 2) move to other side
+        }
+    }
+
+    function moveOnFodder(snake, val) {
+        snake.tailValues.push(val);
+        if ((snake.snakeHead.row === fodder.row)
+            && (snake.snakeHead.col === fodder.col)) {
+            setFodder(placeFodder(snake.tailValues, BOARD_SIZE, BOARD_SIZE));
+            snake.length++;
+        } else {
+            snake.tailValues = snake.tailValues.slice(-snake.length);
+        }
+    }
+
+    function moveOnSnake(snake, nextVal) {
+
+        if (snake.tailValues.includes(nextVal)) {
+            console.log("you are killed.");
+            setGameOver(true);
+            setNewGame(false);
+
+        } else {
+            snake.tailValues = snake.tailValues.slice(-snake.length);
+        }
+
+    }
+
+    function getNextHead(currentHead) {
+        let nextHead = new Cell(currentHead.row, currentHead.col, currentHead.val);
+        switch (direction) {
+            case Direction.UP:
+                if (nextHead.row > 0) {
+                    nextHead.row--;
+                }
+                break;
+            case Direction.DOWN:
+                if (nextHead.row < (BOARD_SIZE - 1)) {
+                    nextHead.row++;
+                }
+                break;
+            case Direction.RIGHT:
+                if (nextHead.col < (BOARD_SIZE - 1)) {
+                    nextHead.col++;
+                }
+                break;
+            case Direction.LEFT:
+                if (nextHead.col > 0) {
+                    nextHead.col--;
+                }
+                break;
+            default:
+        }
+        nextHead.val = board[nextHead.row][nextHead.col];
+        return nextHead;
+    }
+
+    function handleKeydown(e) {
+        const keyPressed = e.key;
+        switch (keyPressed) {
+            case ('ArrowUp'):
+                if (snake.length <= 1) {
+                    return Direction.UP;
+                } else {
+                    if (direction !== Direction.DOWN) {
+                        return Direction.UP;
+                    }
+                    return Direction.DOWN;
+                }
+                break;
+            case ('ArrowDown'):
+                if (snake.length <= 1) {
+                    return Direction.DOWN;
+                } else {
+                    if (direction !== Direction.UP) {
+                        return Direction.DOWN;
+                    }
+                    return Direction.DOWN;
+                }
+                break;
+            case ('ArrowLeft'):
+                if (snake.length <= 1) {
+                    return Direction.LEFT;
+                } else {
+                    if (direction !== Direction.RIGHT) {
+                        return Direction.LEFT;
+                    }
+                    return Direction.LEFT;
+                }
+                break;
+            case ('ArrowRight'):
+                if (snake.length <= 1) {
+                    return Direction.RIGHT;
+                } else {
+                    if (direction !== Direction.LEFT) {
+                        return Direction.RIGHT;
+                    }
+                    return Direction.RIGHT;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    function handleStop() {
+        console.log("stop clicked");
+        setDelay(null);
+    }
+
+}
+
+
+
+export default Board;
+
