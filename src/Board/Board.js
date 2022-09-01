@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import './Board.css';
-import { randomIntFromInterval, useInterval } from '../utils.js'
+import {randomIntFromInterval, useInterval} from '../utils.js'
 import Home from "../interface/Home";
 import KillScreen from "../interface/KillScreen";
 
@@ -37,7 +37,7 @@ function Board() {
     const [newGame, setNewGame] = useState(false);
     const [board, setBoard] = useState(createBoard(BOARD_SIZE));
     const [snake, setSnake] = useState(createSnake(5, 5));
-    const [direction, setDirection] = useState(Direction.RIGHT);
+    let [direction, setDirection] = useState(Direction.RIGHT);
     const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
     const [delay, setDelay] = useState(null);
     const [gameOver, setGameOver] = useState(false);
@@ -45,18 +45,23 @@ function Board() {
     const [counter, setcounter] = useState(0);
 
 
-
     useEffect(() => {
         window.addEventListener('keyup', e => {
+            console.log("keydown: " + e.key);
+            console.log("returned Direction: " + handleKeydown(e));
+            //direction=handleKeydown(e);
             setDirection(handleKeydown(e));
+            console.log("actual direction " + direction);
         });
-    });
+        ;
+    }, []);
 
 
     useEffect(() => {
         if (newGame) {
             console.log("delay: " + delay);
             setDelay(storedSpeed);
+            setNewGame(false);
         }
         if (gameOver) {
             setDelay(null);
@@ -84,16 +89,16 @@ function Board() {
     return (
         <div className="snakeBoard">
             <div>
-                <Home onChoseSpeed={setSpeed} startNewGame={startNewGame} />
+                <Home onChoseSpeed={setSpeed} startNewGame={startNewGame}/>
             </div>
             <div>
-                <KillScreen gameOver={gameOver} startNewGame={startNewGame} />
+                <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
             </div>
             <div>
                 Score: {snake.length}
             </div>
             <div className={'stopButton'}
-                onClick={handleStop}>
+                 onClick={handleStop}>
                 <button>STOP</button>
             </div>
 
@@ -101,7 +106,7 @@ function Board() {
                 <div key={rowIdx} className='snakeBoardRow'>{
                     row.map((cellValue, cellIdx) => (
                         <div key={cellIdx}
-                            className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}`}>
+                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}`}>
 
                         </div>
                     ))
@@ -216,8 +221,8 @@ function Board() {
                 if (snake.length <= 1) {
                     return Direction.UP;
                 } else {
-                    if (direction == Direction.DOWN) {
-                        return Direction.DOWN;
+                    if (direction !== Direction.DOWN) {
+                        return Direction.UP;
                     }
                     return Direction.UP;
                 }
@@ -226,7 +231,7 @@ function Board() {
                 if (snake.length <= 1) {
                     return Direction.DOWN;
                 } else {
-                    if (direction == Direction.UP) {
+                    if (direction === Direction.UP) {
                         return Direction.UP;
                     }
                     return Direction.DOWN;
@@ -235,9 +240,8 @@ function Board() {
             case ('ArrowLeft'):
                 if (snake.length <= 1) {
                     return Direction.LEFT;
-                }
-                else {
-                    if (direction == Direction.RIGHT) {
+                } else {
+                    if (direction === Direction.RIGHT) {
                         return Direction.RIGHT;
                     }
                     return Direction.LEFT;
@@ -247,7 +251,7 @@ function Board() {
                 if (snake.length <= 1) {
                     return Direction.RIGHT;
                 } else {
-                    if (direction == Direction.LEFT) {
+                    if (direction === Direction.LEFT) {
                         return Direction.LEFT;
                     }
                     return Direction.RIGHT;
