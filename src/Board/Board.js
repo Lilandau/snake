@@ -3,25 +3,8 @@ import './Board.css';
 import {randomIntFromInterval, useInterval} from '../utils.js'
 import Home from "../interface/Home";
 import KillScreen from "../interface/KillScreen";
+import {BOARD_SIZE, Cell, createBoard, Direction, setStoredSpeed, storedSpeed} from "./gameUtils";
 
-const Direction = {
-    UP: 'UP',
-    RIGHT: 'RIGHT',
-    DOWN: 'DOWN',
-    LEFT: 'LEFT',
-};
-
-let storedSpeed = 0;
-
-const BOARD_SIZE = 10;
-
-class Cell {
-    constructor(row, col, val) {
-        this.row = row;
-        this.col = col;
-        this.val = val;
-    }
-}
 
 class Snake {
     constructor(snakeHead, length, tailValues) {
@@ -89,7 +72,7 @@ function Board() {
     return (
         <div className="snakeBoard">
             <div>
-                <Home onChoseSpeed={setSpeed} startNewGame={startNewGame}/>
+                <Home onChoseSpeed={setStoredSpeed} startNewGame={startNewGame}/>
             </div>
             <div>
                 <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
@@ -119,10 +102,7 @@ function Board() {
     function startNewGame() {
         setNewGame(true);
     }
-
-    function setSpeed(val) {
-        storedSpeed = val;
-    }
+    
 
     function placeFodder(snakeTail, boardSize) {
         while (true) {
@@ -224,15 +204,15 @@ function Board() {
                     if (direction !== Direction.DOWN) {
                         return Direction.UP;
                     }
-                    return Direction.UP;
+                    return Direction.DOWN;
                 }
                 break;
             case ('ArrowDown'):
                 if (snake.length <= 1) {
                     return Direction.DOWN;
                 } else {
-                    if (direction === Direction.UP) {
-                        return Direction.UP;
+                    if (direction !== Direction.UP) {
+                        return Direction.DOWN;
                     }
                     return Direction.DOWN;
                 }
@@ -241,8 +221,8 @@ function Board() {
                 if (snake.length <= 1) {
                     return Direction.LEFT;
                 } else {
-                    if (direction === Direction.RIGHT) {
-                        return Direction.RIGHT;
+                    if (direction !== Direction.RIGHT) {
+                        return Direction.LEFT;
                     }
                     return Direction.LEFT;
                 }
@@ -251,8 +231,8 @@ function Board() {
                 if (snake.length <= 1) {
                     return Direction.RIGHT;
                 } else {
-                    if (direction === Direction.LEFT) {
-                        return Direction.LEFT;
+                    if (direction !== Direction.LEFT) {
+                        return Direction.RIGHT;
                     }
                     return Direction.RIGHT;
                 }
@@ -269,18 +249,7 @@ function Board() {
 
 }
 
-function createBoard(size) {
-    let counter = 1;
-    const board = [];
-    for (let row = 0; row < size; row++) {
-        const currentRow = [];
-        for (let col = 0; col < size; col++) {
-            currentRow.push(counter++);
-        }
-        board.push(currentRow);
-    }
-    return board;
-}
+
 
 export default Board;
 
