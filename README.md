@@ -68,3 +68,17 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+### on dev stage the strict mode should be disabled but on prod stage not!
+`root.render(
+<React.StrictMode>
+    <App/>
+</React.StrictMode>
+);`
+
+should be:
+
+`root.render(
+<App />
+);`
