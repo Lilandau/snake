@@ -20,21 +20,20 @@ function Board() {
     const [newGame, setNewGame] = useState(false);
     const [board, setBoard] = useState(createBoard(BOARD_SIZE));
     const [snake, setSnake] = useState(createSnake(5, 5));
-    let [direction, setDirection] = useState(Direction.RIGHT);
+    const [direction, setDirection] = useState(Direction.RIGHT);
     const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
     const [delay, setDelay] = useState(null);
     const [gameOver, setGameOver] = useState(false);
 
     const [counter, setcounter] = useState(0);
 
+    useEffect(() => {
+        console.log("new direction: " + direction)
+    }, [direction])
 
     useEffect(() => {
         window.addEventListener('keyup', e => {
-            console.log("keydown: " + e.key);
-            console.log("returned Direction: " + handleKeydown(e));
-            //direction=handleKeydown(e);
             setDirection(handleKeydown(e));
-            console.log("actual direction " + direction);
         });
     }, []);
 
@@ -59,7 +58,6 @@ function Board() {
             console.log("delay: " + delay);
         }
     });
-
 
     useInterval(() => {
         // Your custom logic here
@@ -125,7 +123,6 @@ function Board() {
         const currentHead = snake.snakeHead;
 
         const nextHead = getNextHead(currentHead);
-
 
         if (!((currentHead.row === nextHead.row)
             && (currentHead.col === nextHead.col))) {
@@ -193,44 +190,17 @@ function Board() {
 
     function handleKeydown(e) {
         const keyPressed = e.key;
-        if (snake.length <= 1) {
-            switch (keyPressed) {
-                case ('ArrowUp'):
-                    return Direction.UP;
-                case ('ArrowDown'):
-                    return Direction.DOWN;
-                case ('ArrowLeft'):
-                    return Direction.LEFT;
-                case ('ArrowRight'):
-                    return Direction.RIGHT;
-                default:
-                    break;
-            }
-        } else {
-            switch (keyPressed) {
-                case ('ArrowUp'):
-                    if (direction !== Direction.DOWN) {
-                        return Direction.UP;
-                    }
-                    return Direction.DOWN;
-                case ('ArrowDown'):
-                    if (direction !== Direction.UP) {
-                        return Direction.DOWN;
-                    }
-                    return Direction.DOWN;
-                case ('ArrowLeft'):
-                    if (direction !== Direction.RIGHT) {
-                        return Direction.LEFT;
-                    }
-                    return Direction.LEFT;
-                case ('ArrowRight'):
-                    if (direction !== Direction.LEFT) {
-                        return Direction.RIGHT;
-                    }
-                    return Direction.RIGHT;
-                default:
-                    break;
-            }
+        switch (keyPressed) {
+            case ('ArrowUp'):
+                return Direction.UP;
+            case ('ArrowDown'):
+                return Direction.DOWN;
+            case ('ArrowLeft'):
+                return Direction.LEFT;
+            case ('ArrowRight'):
+                return Direction.RIGHT;
+            default:
+                break;
         }
     }
 
