@@ -46,7 +46,8 @@ export class InfrastructureStack extends cdk.Stack {
     // Sync the build directory contents with the S3 bucket
     const deployment = new s3deploy.BucketDeployment(this, 'DeploySnakeApplication', {
       sources: [s3deploy.Source.asset(BUILD_DIR)],
-      destinationBucket: bucket
+      destinationBucket: bucket,
+      cacheControl: [s3deploy.CacheControl.fromString('max-age=0,no-cache,no-store,must-revalidate')]
     });
 
     // Create Cloudfront distribution with custom domain and redirects
