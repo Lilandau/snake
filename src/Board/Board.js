@@ -123,6 +123,10 @@ function Board() {
         const currentHead = snake.snakeHead;
 
         const nextHead = getNextHead(currentHead);
+        moveAgainstWall(snake, nextHead);
+        nextHead.val = board[nextHead.row][nextHead.col];
+        console.log("current head: " + JSON.stringify(currentHead));
+        console.log("next head: " + JSON.stringify(nextHead));
 
         if (!((currentHead.row === nextHead.row)
             && (currentHead.col === nextHead.col))) {
@@ -132,6 +136,15 @@ function Board() {
             moveOnFodder(snake, nextHead.val);
         } else {
             //TODO 1) kill / 2) move to other side
+        }
+    }
+
+    function moveAgainstWall(snake, nexthead) {
+        if ((nexthead.col < 0) || (nexthead.row < 0)
+            || (nexthead.col >= BOARD_SIZE ) || (nexthead.col >= BOARD_SIZE )) {
+            console.log("you are killed.");
+            setGameOver(true);
+            setNewGame(false);
         }
     }
 
@@ -163,28 +176,19 @@ function Board() {
         let nextHead = new Cell(currentHead.row, currentHead.col, currentHead.val);
         switch (direction) {
             case Direction.UP:
-                if (nextHead.row > 0) {
-                    nextHead.row--;
-                }
+                nextHead.row--;
                 break;
             case Direction.DOWN:
-                if (nextHead.row < (BOARD_SIZE - 1)) {
-                    nextHead.row++;
-                }
+                nextHead.row++;
                 break;
             case Direction.RIGHT:
-                if (nextHead.col < (BOARD_SIZE - 1)) {
-                    nextHead.col++;
-                }
+                nextHead.col++;
                 break;
             case Direction.LEFT:
-                if (nextHead.col > 0) {
-                    nextHead.col--;
-                }
+                nextHead.col--;
                 break;
             default:
         }
-        nextHead.val = board[nextHead.row][nextHead.col];
         return nextHead;
     }
 
