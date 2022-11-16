@@ -34,24 +34,24 @@ function Board() {
             setDelay(null);
         }
     }, [gameOver])
-    
+
     useEffect(() => {
         console.log("newGame: " + newGame)
         if (newGame) {
             console.log("delay: " + delay);
             setDelay(storedSpeed);
-            createSnake(5,5);
+            createSnake(5, 5);
             setNewGame(false);
         }
     }, [newGame])
-    
-    
+
+
     useEffect(() => {
         window.addEventListener('keyup', e => {
             setDirection(handleKeydown(e));
         });
     }, []);
-    
+
 
     useInterval(() => {
         // Your custom logic here
@@ -91,7 +91,7 @@ function Board() {
 
 
     function startNewGame() {
-        setSnake(createSnake(5,5));
+        setSnake(createSnake(5, 5));
         setNewGame(true);
         setGameOver(false);
     }
@@ -126,18 +126,24 @@ function Board() {
         }
         snake.snakeHead = nextHead;
         //check if snake moves on fodder-cell or bites itself
-        moveOn(snake, nextHead.val);
+        moveOn(snake);
         moveOnFodder(snake, nextHead.val);
 
     }
 
     function checkMoveAgainstWall(nextHead) {
-        return !!(nextHead.row < 0 || nextHead.row >= BOARD_SIZE
-            || nextHead.col < 0 || nextHead.col >= BOARD_SIZE);
+        if (nextHead.row < 0 || nextHead.row >= BOARD_SIZE
+            || nextHead.col < 0 || nextHead.col >= BOARD_SIZE) {
+            console.log("you were killed by crashing the wall");
+            return true;
+        }
     }
 
     function checkMoveOnSnake(snake, nextVal) {
-        return !!(snake.tailValues.includes(nextVal));
+        if (snake.tailValues.includes(nextVal)) {
+            console.log("you were killed by eating yourself");
+            return true;
+        }
     }
 
     function moveOnFodder(snake, val) {
@@ -152,7 +158,7 @@ function Board() {
     }
 
     function moveOn(snake) {
-            snake.tailValues = snake.tailValues.slice(-snake.length);
+        snake.tailValues = snake.tailValues.slice(-snake.length);
     }
 
     function getNextHead(currentHead) {
