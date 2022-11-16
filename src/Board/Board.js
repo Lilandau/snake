@@ -32,6 +32,10 @@ function Board() {
     }, [direction])
 
     useEffect(() => {
+        console.log("gameover: " + gameOver)
+    }, [gameOver])
+
+    useEffect(() => {
         window.addEventListener('keyup', e => {
             setDirection(handleKeydown(e));
         });
@@ -121,31 +125,28 @@ function Board() {
 
     function moveSnake() {
         const currentHead = snake.snakeHead;
-
         const nextHead = getNextHead(currentHead);
-        moveAgainstWall(snake, nextHead);
-        nextHead.val = board[nextHead.row][nextHead.col];
-        console.log("current head: " + JSON.stringify(currentHead));
-        console.log("next head: " + JSON.stringify(nextHead));
-
-        if (!((currentHead.row === nextHead.row)
-            && (currentHead.col === nextHead.col))) {
-            snake.snakeHead = nextHead;
-            //check if snake moves on fodder-cell or bites itself
-            moveOnSnake(snake, nextHead.val);
-            moveOnFodder(snake, nextHead.val);
-        } else {
-            //TODO 1) kill / 2) move to other side
-        }
-    }
-
-    function moveAgainstWall(snake, nexthead) {
-        if ((nexthead.col < 0) || (nexthead.row < 0)
-            || (nexthead.col >= BOARD_SIZE ) || (nexthead.col >= BOARD_SIZE )) {
+        if (checkMoveAgainstWall(nextHead) || checkMoveOnSnake(snake, board[nextHead.row][nextHead.col])) {
             console.log("you are killed.");
             setGameOver(true);
             setNewGame(false);
+        } else {
+            nextHead.val = board[nextHead.row][nextHead.col];
         }
+        snake.snakeHead = nextHead;
+        //check if snake moves on fodder-cell or bites itself
+        moveOnSnake(snake, nextHead.val);
+        moveOnFodder(snake, nextHead.val);
+
+    }
+
+    function checkMoveAgainstWall(nextHead) {
+        return !!(nextHead.row < 0 || nextHead.row >= BOARD_SIZE
+            || nextHead.col < 0 || nextHead.col >= BOARD_SIZE);
+    }
+
+    function checkMoveOnSnake(snake, nextVal) {
+        return !!(snake.tailValues.includes(nextVal));
     }
 
     function moveOnFodder(snake, val) {
