@@ -18,50 +18,40 @@ class Snake {
 function Board() {
 
     const [newGame, setNewGame] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
     const [board, setBoard] = useState(createBoard(BOARD_SIZE));
     const [snake, setSnake] = useState(createSnake(5, 5));
     const [direction, setDirection] = useState(Direction.RIGHT);
     const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
     const [delay, setDelay] = useState(null);
-    const [gameOver, setGameOver] = useState(false);
 
     const [counter, setcounter] = useState(0);
 
-    useEffect(() => {
-        console.log("new direction: " + direction)
-    }, [direction])
 
     useEffect(() => {
         console.log("gameover: " + gameOver)
+        if (gameOver) {
+            setDelay(null);
+        }
     }, [gameOver])
-
+    
+    useEffect(() => {
+        console.log("newGame: " + newGame)
+        if (newGame) {
+            console.log("delay: " + delay);
+            setDelay(storedSpeed);
+            createSnake(5,5);
+            setNewGame(false);
+        }
+    }, [newGame])
+    
+    
     useEffect(() => {
         window.addEventListener('keyup', e => {
             setDirection(handleKeydown(e));
         });
     }, []);
-
-
-    useEffect(() => {
-        if (newGame) {
-            console.log("delay: " + delay);
-            setDelay(storedSpeed);
-            setNewGame(false);
-        }
-        if (gameOver) {
-            setDelay(null);
-        }
-        if (newGame && gameOver) {
-            setGameOver(false);
-            setNewGame(false);
-            setSnake(createSnake(5, 5));
-            setFodder(placeFodder(snake.tailValues, BOARD_SIZE));
-            setcounter(0);
-            setDelay(storedSpeed);
-            console.log("stored Speed: " + storedSpeed);
-            console.log("delay: " + delay);
-        }
-    });
+    
 
     useInterval(() => {
         // Your custom logic here
@@ -101,7 +91,9 @@ function Board() {
 
 
     function startNewGame() {
+        setSnake(createSnake(5,5));
         setNewGame(true);
+        setGameOver(false);
     }
 
 
@@ -127,7 +119,6 @@ function Board() {
         const currentHead = snake.snakeHead;
         const nextHead = getNextHead(currentHead);
         if (checkMoveAgainstWall(nextHead) || checkMoveOnSnake(snake, board[nextHead.row][nextHead.col])) {
-            console.log("you are killed.");
             setGameOver(true);
             setNewGame(false);
         } else {
@@ -135,7 +126,7 @@ function Board() {
         }
         snake.snakeHead = nextHead;
         //check if snake moves on fodder-cell or bites itself
-        moveOnSnake(snake, nextHead.val);
+        moveOn(snake, nextHead.val);
         moveOnFodder(snake, nextHead.val);
 
     }
@@ -160,17 +151,8 @@ function Board() {
         }
     }
 
-    function moveOnSnake(snake, nextVal) {
-
-        if (snake.tailValues.includes(nextVal)) {
-            console.log("you are killed.");
-            setGameOver(true);
-            setNewGame(false);
-
-        } else {
+    function moveOn(snake) {
             snake.tailValues = snake.tailValues.slice(-snake.length);
-        }
-
     }
 
     function getNextHead(currentHead) {
