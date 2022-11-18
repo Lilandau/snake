@@ -70,17 +70,17 @@ function Board() {
             <div>
                 Score: {snake.length}
             </div>
-            {/*<div className={'stopButton'}*/}
-            {/*     onClick={handleStop}>*/}
-            {/*    <button>STOP</button>*/}
-            {/*</div>*/}
+            <div className={'stopButton'}
+                 onClick={handleStop}>
+                <button>STOP</button>
+            </div>
 
             {board.map((row, rowIdx) => (
                 <div key={rowIdx} className='snakeBoardRow'>{
                     row.map((cellValue, cellIdx) => (
                         <div key={cellIdx}
-                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}`}>
-
+                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}
+                             ${snake.snakeHead.val===cellValue ? 'snake-head' : ''}`}>
                         </div>
                     ))
                 }</div>

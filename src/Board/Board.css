@@ -13,8 +13,12 @@
     display: inline-block
 }
 
+
 .snake-cell{
     background-color: green;
+}
+.snake-head{
+    background-color: darkgreen;
 }
 
 .food-cell{
