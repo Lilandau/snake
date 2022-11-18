@@ -29,7 +29,7 @@ export default function Home(props){
     return (
         <>
             <Button variant="primary" onClick={handleShow} className='homeButton'>
-                Home
+                NEW GAME
             </Button>
 
             <Modal show={show} onHide={handleClose} size="lg"

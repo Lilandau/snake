@@ -26,8 +26,7 @@ function Board() {
     const [delay, setDelay] = useState(null);
 
     const [counter, setcounter] = useState(0);
-
-
+    
     useEffect(() => {
         console.log("gameover: " + gameOver)
         if (gameOver) {
@@ -80,8 +79,8 @@ function Board() {
                 <div key={rowIdx} className='snakeBoardRow'>{
                     row.map((cellValue, cellIdx) => (
                         <div key={cellIdx}
-                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}`}>
-
+                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}
+                             ${snake.snakeHead.val===cellValue ? 'snake-head' : ''}`}>
                         </div>
                     ))
                 }</div>
