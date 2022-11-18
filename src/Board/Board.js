@@ -26,8 +26,7 @@ function Board() {
     const [delay, setDelay] = useState(null);
 
     const [counter, setcounter] = useState(0);
-
-
+    
     useEffect(() => {
         console.log("gameover: " + gameOver)
         if (gameOver) {
@@ -71,10 +70,10 @@ function Board() {
             <div>
                 Score: {snake.length}
             </div>
-            <div className={'stopButton'}
-                 onClick={handleStop}>
-                <button>STOP</button>
-            </div>
+            {/*<div className={'stopButton'}*/}
+            {/*     onClick={handleStop}>*/}
+            {/*    <button>STOP</button>*/}
+            {/*</div>*/}
 
             {board.map((row, rowIdx) => (
                 <div key={rowIdx} className='snakeBoardRow'>{
