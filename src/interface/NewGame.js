@@ -1,14 +1,29 @@
 import Button from "react-bootstrap/Button";
 import {Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import './Home.css';
 
 
-export default function Home(props){
-    const [show, setShow] = useState(true);
+export default function NewGameDialog(props){
 
-    const handleShow = () => setShow(true);
+    const [show, setShow] = useState(true);
     const [value, setValue] = useState([1, 3]);
+
+    useEffect(()=>{
+        console.log("showNewGameDialog was changed in Modal")
+        if(props.showNewGameDialog){
+            handleShow();
+        }
+        else{
+            setShow(false);
+        }
+    },[props.showNewGameDialog]);
+
+
+    function handleShow(){
+        setShow(true);
+        props.handleStop();
+    }
 
     function handleClose(){
         setShow(false);
@@ -28,7 +43,7 @@ export default function Home(props){
     
     return (
         <>
-            <Button variant="primary" onClick={handleShow} className='homeButton'>
+            <Button variant="primary" onClick={handleShow} className='newGameButton'>
                 NEW GAME
             </Button>
 
@@ -41,10 +56,10 @@ export default function Home(props){
                 <Modal.Body>Choose your speed
                     <div>
                     <ToggleButtonGroup type="radio" name="options" defaultValue={2} onChange={handleChange}>
-                        <ToggleButton id="tbg-radio-1" value={1000}>
+                        <ToggleButton id="tbg-radio-1" value={500}>
                             slow
                         </ToggleButton>
-                        <ToggleButton id="tbg-radio-2" value={500}>
+                        <ToggleButton id="tbg-radio-2" value={350}>
                             normal
                         </ToggleButton>
                         <ToggleButton id="tbg-radio-3" value={100}>

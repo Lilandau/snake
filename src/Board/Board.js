@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import './Board.css';
 import {randomIntFromInterval, useInterval} from '../utils.js'
-import Home from "../interface/Home";
+import NewGameDialog from "../interface/NewGame";
 import KillScreen from "../interface/KillScreen";
 import {BOARD_SIZE, Cell, createBoard, Direction, setStoredSpeed, storedSpeed} from "./gameUtils";
 
@@ -17,6 +17,7 @@ class Snake {
 
 function Board() {
 
+    const [showNewGameDialog, setShowNewGameDialog] = useState(true);
     const [newGame, setNewGame] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [board, setBoard] = useState(createBoard(BOARD_SIZE));
@@ -26,6 +27,15 @@ function Board() {
     const [delay, setDelay] = useState(null);
 
     const [counter, setcounter] = useState(0);
+
+    useEffect(() => {
+        console.log("newGameDialog: " + showNewGameDialog);
+        if (showNewGameDialog) {
+            console.log("newGameDialog: shall be called");
+        }else{
+            console.log("newGamedialog is false");
+        }
+    }, [showNewGameDialog]);
     
     useEffect(() => {
         console.log("gameover: " + gameOver)
@@ -39,6 +49,7 @@ function Board() {
         if (newGame) {
             console.log("delay: " + delay);
             setDelay(storedSpeed);
+            setShowNewGameDialog(false);
             createSnake(5, 5);
             setNewGame(false);
         }
@@ -62,7 +73,7 @@ function Board() {
     return (
         <div className="snakeBoard">
             <div>
-                <Home onChoseSpeed={setStoredSpeed} startNewGame={startNewGame}/>
+                <NewGameDialog onChoseSpeed={setStoredSpeed} startNewGame={startGame} handleStop={handleStop} showNewGameDialog={showNewGameDialog}/>
             </div>
             <div>
                 <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
@@ -88,13 +99,15 @@ function Board() {
         </div>
     );
 
+    function startNewGame(){
+        setShowNewGameDialog(true);
+;    }
 
-    function startNewGame() {
+    function startGame() {
         setSnake(createSnake(5, 5));
         setNewGame(true);
         setGameOver(false);
     }
-
 
     function placeFodder(snakeTail, boardSize) {
         while (true) {
