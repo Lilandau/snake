@@ -1,13 +1,23 @@
 import Button from "react-bootstrap/Button";
 import {Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import './Home.css';
 
 
-export default function Home(props){
-    const [show, setShow] = useState(true);
+export default function NewGameDialog(props){
 
+    const [show, setShow] = useState(true);
     const [value, setValue] = useState([1, 3]);
+
+    useEffect(()=>{
+        console.log("showNewGameDialog was changed in Modal")
+        if(props.showNewGameDialog){
+            handleShow();
+        }
+        else{
+            setShow(false);
+        }
+    },[props.showNewGameDialog]);
 
 
     function handleShow(){
