@@ -6,7 +6,7 @@ export class Cell {
     }
 }
 
-export let storedSpeed = 500; //normal speed as default
+export let storedSpeed = 350; //normal speed as default
 
 export const BOARD_SIZE = 10;
 

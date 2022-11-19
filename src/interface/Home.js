@@ -41,10 +41,10 @@ export default function Home(props){
                 <Modal.Body>Choose your speed
                     <div>
                     <ToggleButtonGroup type="radio" name="options" defaultValue={2} onChange={handleChange}>
-                        <ToggleButton id="tbg-radio-1" value={1000}>
+                        <ToggleButton id="tbg-radio-1" value={500}>
                             slow
                         </ToggleButton>
-                        <ToggleButton id="tbg-radio-2" value={500}>
+                        <ToggleButton id="tbg-radio-2" value={350}>
                             normal
                         </ToggleButton>
                         <ToggleButton id="tbg-radio-3" value={100}>
