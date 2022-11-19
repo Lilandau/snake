@@ -2,7 +2,7 @@ name: CDK Deployment
 run-name: ${{ github.actor }} is deploying Snake 🐍
 on: [workflow_dispatch]
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -24,7 +24,8 @@ jobs:
           name: build-artifact
           path: build
 
-  Deploy:
+  deploy:
+    needs: Build
     runs-on: ubuntu-latest
     steps:
       - name: Download build artifact
