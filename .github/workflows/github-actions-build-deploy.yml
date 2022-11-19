@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: |
           npm install
-          npm run build
+          CI=false npm run build
       
       - name: Move to Infra directory
         run: cd infrastructure
