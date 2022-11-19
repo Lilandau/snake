@@ -8,11 +8,18 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
+      - name: Setup Node/NPM
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
       - name: Build
         run: |
+          npm install
           npm run build
       
-      - run: cd infrastructure
+      - name: Move to Infra directory
+        run: cd infrastructure
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2.1.1
