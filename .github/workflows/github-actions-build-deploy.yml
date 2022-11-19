@@ -2,7 +2,7 @@ name: CDK Deployment
 run-name: ${{ github.actor }} is deploying Snake 🐍
 on: [workflow_dispatch]
 jobs:
-  aws_cdk:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -17,6 +17,18 @@ jobs:
         run: |
           npm install
           CI=false npm run build
+        with:
+          name: build-artifact
+          path: build
+
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+
+        with:
+          name: build-artifact
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2.1.1
