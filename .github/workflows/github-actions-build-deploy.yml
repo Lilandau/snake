@@ -1,8 +1,11 @@
-name: CDK Deployment
+name: CI Pipeline
 run-name: ${{ github.actor }} is deploying Snake 🐍
-on: [workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
 jobs:
-  build:
+  Build_and_Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -18,30 +21,7 @@ jobs:
           npm install
           CI=false npm run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifact
-          path: build
-
-  deploy:
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-
-      - name: Setup Node/NPM
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build-artifact
-
-      - name: cdk diff
+      - name: CDK diff
         uses: youyo/aws-cdk-github-actions@v2.1.1
         with:
           cdk_subcommand: 'diff'
@@ -52,7 +32,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-east-1'
 
-      - name: cdk deploy
+      - name: CDK deploy
         uses: youyo/aws-cdk-github-actions@v2.1.1
         with:
           cdk_subcommand: 'deploy'
