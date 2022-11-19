@@ -38,7 +38,7 @@ export default function Home(props){
                 <Modal.Header closeButton>
                     <Modal.Title>Play Snake</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Choose your speeeeeeeeed
+                <Modal.Body>Choose your speed
                     <div>
                     <ToggleButtonGroup type="radio" name="options" defaultValue={2} onChange={handleChange}>
                         <ToggleButton id="tbg-radio-1" value={1000}>
