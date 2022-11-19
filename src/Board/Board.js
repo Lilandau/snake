@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import './Board.css';
 import {randomIntFromInterval, useInterval} from '../utils.js'
-import Home from "../interface/Home";
+import Home from "../interface/NewGame";
 import KillScreen from "../interface/KillScreen";
 import {BOARD_SIZE, Cell, createBoard, Direction, setStoredSpeed, storedSpeed} from "./gameUtils";
 
@@ -62,7 +62,7 @@ function Board() {
     return (
         <div className="snakeBoard">
             <div>
-                <Home onChoseSpeed={setStoredSpeed} startNewGame={startNewGame}/>
+                <Home onChoseSpeed={setStoredSpeed} startNewGame={startNewGame} handleStop={handleStop}/>
             </div>
             <div>
                 <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>

@@ -7,8 +7,13 @@ import './Home.css';
 export default function Home(props){
     const [show, setShow] = useState(true);
 
-    const handleShow = () => setShow(true);
     const [value, setValue] = useState([1, 3]);
+
+
+    function handleShow(){
+        setShow(true);
+        props.handleStop();
+    }
 
     function handleClose(){
         setShow(false);
@@ -28,7 +33,7 @@ export default function Home(props){
     
     return (
         <>
-            <Button variant="primary" onClick={handleShow} className='homeButton'>
+            <Button variant="primary" onClick={handleShow} className='newGameButton'>
                 NEW GAME
             </Button>
 

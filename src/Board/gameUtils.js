@@ -31,6 +31,7 @@ export function createBoard(size) {
 }
 
 export function setStoredSpeed(val){
+    console.log("stored speed was set to: " + val);
     storedSpeed=val;
 }
 
