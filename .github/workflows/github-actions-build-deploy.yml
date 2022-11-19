@@ -32,9 +32,10 @@ jobs:
       - name: cdk deploy
         uses: youyo/aws-cdk-github-actions@v2.1.1
         with:
-          cdk_subcommand: 'deploy --require-approval never'
+          cdk_subcommand: 'deploy'
           working_dir: './infrastructure'
           cdk_stack: 'InfrastructureStack'
+          cdk_args: '--require-approval never'
           actions_comment: true
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
