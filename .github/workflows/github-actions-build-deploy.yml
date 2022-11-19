@@ -17,6 +17,9 @@ jobs:
         run: |
           npm install
           CI=false npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: build
@@ -26,7 +29,6 @@ jobs:
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v3
-
         with:
           name: build-artifact
 
