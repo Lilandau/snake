@@ -1,5 +1,5 @@
 .snakeBoard{
-    outline: 2px solid rgb(134, 154, 189);
+    outline: 2px solid #E6D3A7;
 }
 
 .snakeBoardRow{
@@ -9,16 +9,16 @@
 .snakeBordCell{
     width: 50px;
     height: 50px;
-    outline: 1px solid rgb(134, 154, 189);
+    outline: 1px solid #E6D3A7;
     display: inline-block
 }
 
 
 .snake-cell{
-    background-color: blue;
+    background-color: #59A985;
 }
 .snake-head{
-    background-color: darkblue;
+    background-color: #3A7563;
 }
 
 .food-cell{
