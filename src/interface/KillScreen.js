@@ -19,7 +19,7 @@ export default function KillScreen(props){
             <Modal show={props.gameOver} size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
-                <Modal.Header closeButton>
+                <Modal.Header >
                     <Modal.Title>GAME OVER</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
