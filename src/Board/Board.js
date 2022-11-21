@@ -189,21 +189,18 @@ function Board() {
 
     function handleKeydown(e) {
         const keyPressed = e.key;
-        switch (keyPressed) {
-            case ('ArrowUp'):
-                setDirection(Direction.UP)
-                break;
-            case ('ArrowDown'):
-                setDirection(Direction.DOWN)
-                break;
-            case ('ArrowLeft'):
-                setDirection(Direction.LEFT)
-                break;
-            case ('ArrowRight'):
-                setDirection(Direction.RIGHT);
-                break;
-            default:
-               break;
+        console.log("key pressed: " + keyPressed);
+        if (keyPressed === 'ArrowUp' || keyPressed === 'w' || keyPressed === 'W') {
+            setDirection(Direction.UP);
+        }
+        if (keyPressed === 'ArrowDown' || keyPressed === 's' || keyPressed === 'S') {
+            setDirection(Direction.DOWN);
+        }
+        if (keyPressed === 'ArrowLeft' || keyPressed === 'a' || keyPressed === 'A') {
+            setDirection(Direction.LEFT);
+        }
+        if (keyPressed === 'ArrowRight' || keyPressed === 'd' || keyPressed === 'D') {
+            setDirection(Direction.RIGHT);
         }
     }
 
@@ -211,9 +208,6 @@ function Board() {
         console.log("stop clicked");
         setDelay(null);
     }
-
 }
-
-
 export default Board;
 
