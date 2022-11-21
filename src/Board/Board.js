@@ -24,17 +24,7 @@ function Board() {
     const [direction, setDirection] = useState(Direction.RIGHT);
     const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
     const [delay, setDelay] = useState(null);
-
     const [counter, setcounter] = useState(0);
-
-    useEffect(() => {
-        console.log("newGameDialog: " + showNewGameDialog);
-        if (showNewGameDialog) {
-            console.log("newGameDialog: shall be called");
-        } else {
-            console.log("newGamedialog is false");
-        }
-    }, [showNewGameDialog]);
 
     useEffect(() => {
         console.log("gameover: " + gameOver)
@@ -46,7 +36,6 @@ function Board() {
     useEffect(() => {
         console.log("newGame: " + newGame)
         if (newGame) {
-            console.log("delay: " + delay);
             setDelay(storedSpeed);
             setShowNewGameDialog(false);
             createSnake(5, 5);
@@ -57,7 +46,7 @@ function Board() {
 
     useEffect(() => {
         window.addEventListener('keyup', e => {
-            setDirection(handleKeydown(e));
+            handleKeydown(e);
         });
     }, []);
 
@@ -101,7 +90,6 @@ function Board() {
 
     function startNewGame() {
         setShowNewGameDialog(true);
-        ;
     }
 
     function startGame() {
@@ -131,8 +119,6 @@ function Board() {
     function moveSnake() {
         const currentHead = snake.snakeHead;
         const nextHead = getNextHead(currentHead);
-        console.log("snake values: " + JSON.stringify(snake));
-        console.log("next head: " + JSON.stringify(nextHead));
         if (checkMoveAgainstWall(nextHead) || checkMoveOnSnake(snake, board[nextHead.row][nextHead.col])) {
             setGameOver(true);
             setNewGame(false);
@@ -193,7 +179,7 @@ function Board() {
             default:
         }
         if ((nextHead.row >= 0 && nextHead.row < BOARD_SIZE) &&
-             (nextHead.col >= 0 && nextHead.col < BOARD_SIZE)) {
+            (nextHead.col >= 0 && nextHead.col < BOARD_SIZE)) {
             nextHead.val = board[nextHead.row][nextHead.col];
         } else {
             nextHead.val = -1
@@ -203,18 +189,21 @@ function Board() {
 
     function handleKeydown(e) {
         const keyPressed = e.key;
-        console.log("key pressed: " + keyPressed);
         switch (keyPressed) {
             case ('ArrowUp'):
-                return Direction.UP;
-            case ('ArrowDown'):
-                return Direction.DOWN;
-            case ('ArrowLeft'):
-                return Direction.LEFT;
-            case ('ArrowRight'):
-                return Direction.RIGHT;
-            default:
+                setDirection(Direction.UP)
                 break;
+            case ('ArrowDown'):
+                setDirection(Direction.DOWN)
+                break;
+            case ('ArrowLeft'):
+                setDirection(Direction.LEFT)
+                break;
+            case ('ArrowRight'):
+                setDirection(Direction.RIGHT);
+                break;
+            default:
+               break;
         }
     }
 
