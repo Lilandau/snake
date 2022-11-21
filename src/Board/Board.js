@@ -14,7 +14,6 @@ class Snake {
     }
 }
 
-
 function Board() {
 
     const [showNewGameDialog, setShowNewGameDialog] = useState(true);
@@ -25,18 +24,8 @@ function Board() {
     const [direction, setDirection] = useState(Direction.RIGHT);
     const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
     const [delay, setDelay] = useState(null);
-
     const [counter, setcounter] = useState(0);
 
-    useEffect(() => {
-        console.log("newGameDialog: " + showNewGameDialog);
-        if (showNewGameDialog) {
-            console.log("newGameDialog: shall be called");
-        }else{
-            console.log("newGamedialog is false");
-        }
-    }, [showNewGameDialog]);
-    
     useEffect(() => {
         console.log("gameover: " + gameOver)
         if (gameOver) {
@@ -47,7 +36,6 @@ function Board() {
     useEffect(() => {
         console.log("newGame: " + newGame)
         if (newGame) {
-            console.log("delay: " + delay);
             setDelay(storedSpeed);
             setShowNewGameDialog(false);
             createSnake(5, 5);
@@ -58,7 +46,7 @@ function Board() {
 
     useEffect(() => {
         window.addEventListener('keyup', e => {
-            setDirection(handleKeydown(e));
+            handleKeydown(e);
         });
     }, []);
 
@@ -73,7 +61,8 @@ function Board() {
     return (
         <div className="snakeBoard">
             <div>
-                <NewGameDialog onChoseSpeed={setStoredSpeed} startNewGame={startGame} handleStop={handleStop} showNewGameDialog={showNewGameDialog}/>
+                <NewGameDialog onChoseSpeed={setStoredSpeed} startNewGame={startGame} handleStop={handleStop}
+                               showNewGameDialog={showNewGameDialog}/>
             </div>
             <div>
                 <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
@@ -91,7 +80,7 @@ function Board() {
                     row.map((cellValue, cellIdx) => (
                         <div key={cellIdx}
                              className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}
-                             ${snake.snakeHead.val===cellValue ? 'snake-head' : ''}`}>
+                             ${snake.snakeHead.val === cellValue ? 'snake-head' : ''}`}>
                         </div>
                     ))
                 }</div>
@@ -99,9 +88,9 @@ function Board() {
         </div>
     );
 
-    function startNewGame(){
+    function startNewGame() {
         setShowNewGameDialog(true);
-;    }
+    }
 
     function startGame() {
         setSnake(createSnake(5, 5));
@@ -144,8 +133,7 @@ function Board() {
     }
 
     function checkMoveAgainstWall(nextHead) {
-        if (nextHead.row < 0 || nextHead.row >= BOARD_SIZE
-            || nextHead.col < 0 || nextHead.col >= BOARD_SIZE) {
+        if (nextHead.val === -1) {
             console.log("you were killed by crashing the wall");
             return true;
         }
@@ -190,22 +178,29 @@ function Board() {
                 break;
             default:
         }
+        if ((nextHead.row >= 0 && nextHead.row < BOARD_SIZE) &&
+            (nextHead.col >= 0 && nextHead.col < BOARD_SIZE)) {
+            nextHead.val = board[nextHead.row][nextHead.col];
+        } else {
+            nextHead.val = -1
+        }
         return nextHead;
     }
 
     function handleKeydown(e) {
         const keyPressed = e.key;
-        switch (keyPressed) {
-            case ('ArrowUp'):
-                return Direction.UP;
-            case ('ArrowDown'):
-                return Direction.DOWN;
-            case ('ArrowLeft'):
-                return Direction.LEFT;
-            case ('ArrowRight'):
-                return Direction.RIGHT;
-            default:
-                break;
+        console.log("key pressed: " + keyPressed);
+        if (keyPressed === 'ArrowUp' || keyPressed === 'w' || keyPressed === 'W') {
+            setDirection(Direction.UP);
+        }
+        if (keyPressed === 'ArrowDown' || keyPressed === 's' || keyPressed === 'S') {
+            setDirection(Direction.DOWN);
+        }
+        if (keyPressed === 'ArrowLeft' || keyPressed === 'a' || keyPressed === 'A') {
+            setDirection(Direction.LEFT);
+        }
+        if (keyPressed === 'ArrowRight' || keyPressed === 'd' || keyPressed === 'D') {
+            setDirection(Direction.RIGHT);
         }
     }
 
@@ -213,9 +208,6 @@ function Board() {
         console.log("stop clicked");
         setDelay(null);
     }
-
 }
-
-
 export default Board;
 
