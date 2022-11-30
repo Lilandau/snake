@@ -25,6 +25,7 @@ function Board() {
     const [fodder, setFodder] = useState(placeFodder(snake.tailValues, BOARD_SIZE));
     const [delay, setDelay] = useState(null);
     const [counter, setcounter] = useState(0);
+    let [countdown, setCountdown] = useState(3);
 
     useEffect(() => {
         console.log("gameover: " + gameOver)
@@ -59,33 +60,36 @@ function Board() {
 
 
     return (
-        <div className="snakeBoard">
-            <div>
-                <NewGameDialog onChoseSpeed={setStoredSpeed} startNewGame={startGame} handleStop={handleStop}
-                               showNewGameDialog={showNewGameDialog}/>
-            </div>
-            <div>
-                <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
-            </div>
-            <div>
-                Score: {snake.length}
-            </div>
-            <div className={'stopButton'}
-                 onClick={handleStop}>
-                <button>STOP</button>
-            </div>
+        <>
+            <div>countdown= {countdown}</div>
+            <div className="snakeBoard">
+                <div>
+                    <NewGameDialog onChoseSpeed={setStoredSpeed} startNewGame={startGame} handleStop={handleStop}
+                                   showNewGameDialog={showNewGameDialog}/>
+                </div>
+                <div>
+                    <KillScreen gameOver={gameOver} startNewGame={startNewGame}/>
+                </div>
+                <div>
+                    Score: {snake.length}
+                </div>
+                <div className={'stopButton'}
+                     onClick={handleStop}>
+                    <button>STOP</button>
+                </div>
 
-            {board.map((row, rowIdx) => (
-                <div key={rowIdx} className='snakeBoardRow'>{
-                    row.map((cellValue, cellIdx) => (
-                        <div key={cellIdx}
-                             className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}
+                {board.map((row, rowIdx) => (
+                    <div key={rowIdx} className='snakeBoardRow'>{
+                        row.map((cellValue, cellIdx) => (
+                            <div key={cellIdx}
+                                 className={`snakeBordCell ${snake.tailValues.includes(cellValue) ? 'snake-cell' : ''} ${fodder.val === cellValue ? 'food-cell' : ''}
                              ${snake.snakeHead.val === cellValue ? 'snake-head' : ''}`}>
-                        </div>
-                    ))
-                }</div>
-            ))}
-        </div>
+                            </div>
+                        ))
+                    }</div>
+                ))}
+            </div>
+        </>
     );
 
     function startNewGame() {
@@ -94,6 +98,8 @@ function Board() {
 
     function startGame() {
         setSnake(createSnake(5, 5));
+        setDirection(Direction.RIGHT);
+        //TODO implement countdown
         setNewGame(true);
         setGameOver(false);
     }
@@ -209,5 +215,6 @@ function Board() {
         setDelay(null);
     }
 }
+
 export default Board;
 
