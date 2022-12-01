@@ -1,25 +1,26 @@
 import Button from "react-bootstrap/Button";
-import {Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import {useState} from "react";
 
 
-export default function KillScreen(props){
-    
+export default function KillScreen(props) {
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    
-    
-    function handleNewGame(){
+
+
+    function handleNewGame() {
+        setShow(false);
         console.log("new Game triggert in KillScreen");
         props.startNewGame(true);
     }
-        
-    return(
+
+    return (
         <>
             <Modal show={props.gameOver} size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
-                <Modal.Header >
+                <Modal.Header>
                     <Modal.Title>GAME OVER</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

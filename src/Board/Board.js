@@ -26,6 +26,7 @@ function Board() {
     const [delay, setDelay] = useState(null);
     const [counter, setcounter] = useState(0);
     let [countdown, setCountdown] = useState(3);
+    const [playCountdown, setPlayCountdown] = useState(false);
 
     useEffect(() => {
         console.log("gameover: " + gameOver)
@@ -33,6 +34,7 @@ function Board() {
             setDelay(null);
         }
     }, [gameOver])
+
 
     useEffect(() => {
         console.log("newGame: " + newGame)
@@ -57,6 +59,27 @@ function Board() {
         setcounter(counter + 1);
         moveSnake();
     }, delay)
+
+
+    useEffect(() => {
+        if (playCountdown) {
+            const intervalID = setInterval(() => {
+                updateCounter();
+                setGameOver(false);
+                if (countdown === -1) {
+                    setPlayCountdown(false);
+                    setNewGame(true);
+                   
+                }
+            }, 1000);
+
+            return () => clearInterval(intervalID);
+        }
+    }, [playCountdown])
+
+    function updateCounter() {
+        setCountdown(countdown--);
+    }
 
 
     return (
@@ -99,9 +122,9 @@ function Board() {
     function startGame() {
         setSnake(createSnake(5, 5));
         setDirection(Direction.RIGHT);
-        //TODO implement countdown
-        setNewGame(true);
-        setGameOver(false);
+        setCountdown(3);
+        setPlayCountdown(true);
+
     }
 
     function placeFodder(snakeTail, boardSize) {
