@@ -62,30 +62,10 @@ function Board() {
     }, delay)
 
 
-    useEffect(() => {
-        if (playCountdown) {
-            setGameOver(false);
-            const intervalID = setInterval(() => {
-                updateCounter();
-                if (countdown === -1) {
-                    setPlayCountdown(false);
-                    setNewGame(true);
-
-                }
-            }, 1000);
-
-            return () => clearInterval(intervalID);
-        }
-    }, [playCountdown])
-
-    function updateCounter() {
-        setCountdown(countdown--);
-    }
-
-
     return (
         <>
-            <CountDown countdown= {countdown} show={playCountdown}> </CountDown>
+            <CountDown countdown={countdown} show={playCountdown} setPlayCountdown={setPlayCountdown}
+                       setNewGame={setNewGame}> </CountDown>
             <div className="snakeBoard">
                 <div>
                     <NewGameDialog onChoseSpeed={setStoredSpeed} startNewGame={startGame} handleStop={handleStop}
@@ -121,9 +101,9 @@ function Board() {
     }
 
     function startGame() {
+        setGameOver(false);
         setSnake(createSnake(5, 5));
         setDirection(Direction.RIGHT);
-        setCountdown(3);
         setPlayCountdown(true);
 
     }
