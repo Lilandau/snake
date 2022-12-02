@@ -63,9 +63,9 @@ function Board() {
 
     useEffect(() => {
         if (playCountdown) {
+            setGameOver(false);
             const intervalID = setInterval(() => {
                 updateCounter();
-                setGameOver(false);
                 if (countdown === -1) {
                     setPlayCountdown(false);
                     setNewGame(true);
