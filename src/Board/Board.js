@@ -4,6 +4,7 @@ import {randomIntFromInterval, useInterval} from '../utils.js'
 import NewGameDialog from "../interface/NewGame";
 import KillScreen from "../interface/KillScreen";
 import {BOARD_SIZE, Cell, createBoard, Direction, setStoredSpeed, storedSpeed} from "./gameUtils";
+import CountDown from "../interface/CountDown";
 
 
 class Snake {
@@ -69,7 +70,7 @@ function Board() {
                 if (countdown === -1) {
                     setPlayCountdown(false);
                     setNewGame(true);
-                   
+
                 }
             }, 1000);
 
@@ -84,7 +85,7 @@ function Board() {
 
     return (
         <>
-            <div>countdown= {countdown}</div>
+            <CountDown countdown= {countdown} show={playCountdown}> </CountDown>
             <div className="snakeBoard">
                 <div>
                     <NewGameDialog onChoseSpeed={setStoredSpeed} startNewGame={startGame} handleStop={handleStop}

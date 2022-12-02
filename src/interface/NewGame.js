@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/Button";
 import {Modal, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import './Home.css';
+import './NewGame.css';
 
 
 export default function NewGameDialog(props){
