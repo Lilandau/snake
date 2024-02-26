@@ -23,7 +23,7 @@ jobs:
           CI=false npm run build
 
       - name: CDK diff
-        uses: youyo/aws-cdk-github-actions@v2.1.1
+        uses: youyo/aws-cdk-github-actions@v2.1.4
         with:
           cdk_subcommand: 'diff'
           working_dir: './infrastructure'
@@ -34,7 +34,7 @@ jobs:
           AWS_DEFAULT_REGION: 'us-east-1'
 
       - name: CDK deploy
-        uses: youyo/aws-cdk-github-actions@v2.1.1
+        uses: youyo/aws-cdk-github-actions@v2.1.4
         with:
           cdk_subcommand: 'deploy'
           working_dir: './infrastructure'
