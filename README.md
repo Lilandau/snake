@@ -1,3 +1,11 @@
+# Try it online
+
+https://snake.ninasworkshop.de/
+
+
+----
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -42,6 +50,8 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 ## Deployment
 
 See `infrastructure/README.md`
+
+Deployment with GitHub actions currently broken (needs secrets update), only manual deployment possible for now.
 
 ### How to create from scratch
 
